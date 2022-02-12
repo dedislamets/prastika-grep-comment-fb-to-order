@@ -19,7 +19,7 @@ class Webhook extends CI_Controller {
         $chatid = $array["chatid"];
         $pesan = $array["message"];
         $waktu = date("Y-m-d H:i:s", $array["time"]);
-
+        $message="";
         foreach ($_REQUEST AS $key => $value){
             $message .= "$key => $value ($_SERVER[REQUEST_METHOD])\n";
         }
