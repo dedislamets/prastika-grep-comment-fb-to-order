@@ -14,9 +14,10 @@ class Comment extends CI_Controller {
             $data['title'] = 'Home';
             $data['main'] = 'dashboard/comment';
 			$data['js'] = 'script/comment';
+			$config = $this->admin->get_array('tb_setting');
+			$data['config'] = $config;
 
 			if(!empty($this->input->get('id',true))){
-				$config = $this->admin->get_array('tb_setting');
 
 				$curl = curl_init();
 
@@ -42,7 +43,7 @@ class Comment extends CI_Controller {
 			    	$data = array(
 				        'id_posting'  => $response['id'],
 				        'content' => $response['message'],
-				        'full_picture' => $response['full_picture'],
+				        'full_picture' => (empty($response['full_picture'])? '' : $response['full_picture']),
 				        'format_order'  => '',
 				        'status'		=> 'Aktif'
 				        
