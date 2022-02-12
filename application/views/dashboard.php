@@ -235,7 +235,8 @@
     <script src="<?= base_url() ?>assets/main/lib/Flot/jquery.flot.resize.js"></script>
     <script src="<?= base_url() ?>assets/main/lib/flot-spline/jquery.flot.spline.js"></script>
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="<?= base_url() ?>assets/main/js/shamcey.js"></script>
     <!-- <script src="<?= base_url() ?>assets/main/js/dashboard.js"></script> -->
