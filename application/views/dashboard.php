@@ -11,7 +11,7 @@
     <link href="<?= base_url() ?>assets/main/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="<?= base_url() ?>assets/main/lib/Ionicons/css/ionicons.css" rel="stylesheet">
     <link href="<?= base_url() ?>assets/main/lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
-
+    <link href="<?= base_url() ?>assets/main/lib/datatables/jquery.dataTables.css" rel="stylesheet">
     <!-- Shamcey CSS -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/main/css/shamcey.css">
   </head>
@@ -40,7 +40,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="index.html" class="nav-link">
+          <a href="members" class="nav-link">
             <i class="icon ion-ios-bookmarks-outline"></i>
             <span>Members</span>
           </a>
@@ -239,6 +239,8 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="<?= base_url() ?>assets/main/js/shamcey.js"></script>
+    <script src="<?= base_url() ?>assets/main/lib/datatables/jquery.dataTables.js"></script>
+    <script src="<?= base_url() ?>assets/main/lib/datatables-responsive/dataTables.responsive.js"></script>
     <!-- <script src="<?= base_url() ?>assets/main/js/dashboard.js"></script> -->
     <?php
       $this->load->view($js); 
