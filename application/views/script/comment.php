@@ -3,8 +3,8 @@
     el: "#app",
     mounted: function () {
       this.loadPosting();
-      this.loadComment();
-      this.loadRekap();
+      //this.loadComment();
+      //this.loadRekap();
       this.loadinit();
       this.loadData();
     },
@@ -26,10 +26,9 @@
     },
     methods: {
       loadinit: function(){
-        // setInterval(function () {
-        //   app.loadComment();
-        //   app.loadRekap();
-        // }, 10000);
+        this.loadComment();
+        this.loadRekap();
+        
       },
       showModal: function(){
         $("#Modal").modal({backdrop: 'static', keyboard: false}) ;  
@@ -44,7 +43,8 @@
       },
       loadRekap: function(){
         var that = this;
-        $.get('<?= base_url()?>comment/rekap', null, function(data){ 
+        $.get('<?= base_url()?>comment/rekap', {id: that.id}, function(data){ 
+          console.log('rekap');
           that.list_rekap = data.data;
         })
       },
@@ -64,7 +64,6 @@
   
         axios.get("<?= base_url()?>comment/data", { params: article })
         .then(response => {
-          // debugger;
           that.status = response.data.status;
           that.format_order = response.data.format_order;
           if(response.data.status == 'Aktif'){
@@ -84,53 +83,103 @@
         //   }
         // })
       },
-      nextComment: function(url){
+      async nextComment(url){
         var that = this;
-        $.get(url, null,function(next_data){
-            that.list_comment = that.list_comment.concat(next_data.data);
-            if(next_data.paging.next != undefined){
-              that.nextComment(next_data.paging.next);
+
+        try{
+          await axios.get(url, null)
+          .then(next_data => {
+            console.log('next');
+            that.list_comment = that.list_comment.concat(next_data.data.data);
+            if(next_data.data.paging.next != undefined){
+              that.nextComment(next_data.data.paging.next);
             }else{
-              $.each(that.list_comment, function(_, obj) {
-                if(obj.message.includes('#')){
-                  var arr = obj.message.split("#");
-                  $.each(arr, function(i, row) {
-                    if(row.includes('XYZ')){
-                      $.get('<?= base_url() ?>register/rekap',{ kode : row, pesan : obj.message }, function(result){
+              if(that.status == 'Aktif'){
+                $.each(that.list_comment, function(_, obj) {
+                  if(obj.message.includes('#')){
+                    var arr = obj.message.split("#");
+                    $.get('<?= base_url() ?>register/rekap',{ kode : arr[1], pesan : obj.message, id_posting: that.id }, function(result){
                         // alert(result);
-                      })
-                    }
-                  })
-                }
-              })
-            }
-        })
-      },
-      loadComment: function(){
-        var that = this;
-        var sParam = { access_token : that.token};
-        var link = 'https://graph.facebook.com/' + that.id + '/comments';
-        $.get(link,sParam, function(data){
-          that.list_comment=data.data;
-          if(data.paging != undefined){
-            that.nextComment(data.paging.next);
-          }else{
-            $.each(that.list_comment, function(_, obj) {
-              if(obj.message.includes('#')){
-                var arr = obj.message.split("#");
-                $.each(arr, function(i, row) {
-                  if(row.includes('XYZ')){
-                    $.get('<?= base_url() ?>register/rekap',{ kode : row, pesan : obj.message }, function(result){
-                      // alert(result);
                     })
                   }
                 })
               }
-            })
-          }
 
-          
-        },'json');
+              setInterval(function () {
+                that.getOnlyLastComment();
+              }, 10000);
+              
+            }
+          })
+        }catch(e){
+
+        }
+
+    
+      },
+      async getOnlyLastComment(){
+        var that = this;
+        var sParam = { access_token : that.token,order : 'reverse_chronological', limit: 5};
+
+        try{
+          await axios.get('https://graph.facebook.com/' + that.id + '/comments', { params: sParam })
+          .then(next_data => {
+            console.log('last comment');
+            // that.list_comment = that.list_comment.concat(next_data.data.data);
+
+            var ids = new Set(that.list_comment.map(d => d.id));
+            var merged = [...that.list_comment, ...next_data.data.data.filter(d => !ids.has(d.id))];
+            console.log(merged);
+            that.list_comment = merged;
+            if(that.status == 'Aktif'){
+              $.each(next_data.data.data, function(_, obj) {
+                if(obj.message.includes('#')){
+                  var arr = obj.message.split("#");
+                  $.get('<?= base_url() ?>register/rekap',{ kode : arr[1], pesan : obj.message, id_posting: that.id }, function(result){
+                        // alert(result);
+                  })
+                }
+              })
+            }
+            
+          })
+        }catch(e){
+
+        }
+
+    
+      },
+      async loadComment(){
+        var that = this;
+        var sParam = { access_token : that.token,order : 'reverse_chronological'};
+        try {
+          await axios.get('https://graph.facebook.com/' + that.id + '/comments', { params: sParam })
+          .then(response => {
+            console.log('comment');
+            that.list_comment=response.data.data;
+            if(response.data.paging.next != undefined){
+              that.nextComment(response.data.paging.next);
+            }else{
+              if(that.status == 'Aktif'){
+                $.each(that.list_comment, function(_, obj) {
+                  if(obj.message.includes('#')){
+                    var arr = obj.message.split("#");
+                    $.get('<?= base_url() ?>register/rekap',{ kode : arr[1], pesan : obj.message, id_posting: that.id }, function(result){
+                        // alert(result);
+                    })
+                  }
+                })
+              }
+
+              setInterval(function () {
+                that.getOnlyLastComment();
+              }, 10000);
+            }
+          });
+
+        }catch(e) {
+          alert(e);
+        }
       },
     
     }

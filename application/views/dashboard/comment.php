@@ -1,3 +1,10 @@
+<style type="text/css">
+  .media {
+    border-bottom: solid 2px darkblue;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+</style>
 <div class="sh-breadcrumb">
   <nav class="breadcrumb">
     <a class="breadcrumb-item" href="index.html">Home</a>
@@ -52,7 +59,6 @@
                       </div> -->
                     </div><!-- media -->
                     <div class="mg-t-20 mg-md-t-0 tx-12 d-flex align-items-center">
-                      <a href="#" class="mg-r-10">Chat History</a>
                       <a href="#" class="mg-r-10">Report</a>
                       <a href="#"><i class="icon ion-more tx-16"></i></a>
                     </div>
@@ -84,31 +90,27 @@
       </div>
       <div class="col-lg-4 mg-t-20 mg-lg-t-0">
 
-        <div class="card bd-primary card-tab mg-t-20">
-          <div class="card-header bg-primary">
-            <nav class="nav">
-              <a href="#tabUsers" class="nav-link active" data-toggle="tab"><i class="icon ion-ios-contact-outline"></i></a>
-            </nav>
+        <div class="card bd-primary mg-t-20">
+          <div class="card-header bg-primary tx-white">
+            Book Order
           </div><!-- card-header -->
           <div class="card-body tab-content">
-            <div id="tabUsers" class="tab-pane active">
-              <label class="card-tab-label">Recent Book Order</label>
-              <div class="media-list">
-                <template v-for="(log, index) in list_rekap">
-                  <div class="media">
-                    <div>{{ log.status }}</div>
-                    <div class="media-body">
-                      <h6>{{ log.nama_facebook }} - {{ log.nama_lengkap }}</h6>
-                      <h6>{{ log.kota }}</h6>
-                      <p>{{ log.nomor_wa }}</p>
-                      <p>Product : {{ log.kode_product}}</p>
-                      <p>Qty : {{ log.qty}}</p>
-                    </div>
-                    <div><a href="" class="btn btn-success pd-sm-x-20 mg-sm-r-5">Cetak</a></div>
+            <div class="media-list">
+              <template v-for="(log, index) in list_rekap">
+                <div class="media" style="border-bottom: solid 2px darkblue;padding-bottom: 10px;margin-bottom: 10px;">
+                  <div style="padding-right: 10px;">{{ log.status }}</div>
+                  <div class="media-body">
+                    <h6 style="margin-bottom: 0;">{{ log.nama_facebook }} - {{ log.nama_lengkap }}</h6>
+                    <h6 style="margin-bottom: 0;">{{ log.kota }}</h6>
+                    <p style="margin-bottom: 0;">{{ log.nomor_wa }}</p>
+                    <p style="margin-bottom: 0;">{{ log.kode_product}} - {{ log.nama_barang}}</p>
+                    <p style="margin-bottom: 0;">Qty : {{ log.qty}}</p>
                   </div>
-                </template>
-              </div><!-- media-list -->
-
+                  <div>ID MEMBER:<br>
+                    <div style="font-size: 29px;font-weight: bold;">{{log.id_member}}</div>
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
         </div>

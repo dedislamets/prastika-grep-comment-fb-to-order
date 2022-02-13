@@ -290,5 +290,31 @@ class Admin extends CI_Model
  
         curl_close($ch);
     }
+    function kirim_wa($hp,$msg){
+        $fields = array(
+            'token' => '5pCW3hv3WG1uWfRVQn4oqnNX84uURykBK1gzAZ4zvX8cjttm5e',
+            'number' => $hp,
+            'message' => $msg,
+            'date' => date("Y-m-d"),
+            'time' => date("H:i:s")
+        );
+        $curl = curl_init();
 
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => 'https://app.ruangwa.id/api/send_message',
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'POST',
+          CURLOPT_POSTFIELDS => 'token='. $fields['token'].'&number='.$fields['number'].'&message='.$fields['message']
+        ));
+
+        $response = curl_exec($curl);
+        $response = json_decode($response, true);
+        curl_close($curl);
+        return $response;
+    }
 }

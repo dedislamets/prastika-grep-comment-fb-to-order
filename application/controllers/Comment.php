@@ -64,13 +64,16 @@ class Comment extends CI_Controller {
 
 	public function rekap(){
 	    $id= $this->input->get("id");
-	    $data['data'] = $this->admin->get_result_array('rekapan',array( 'kode_book' => 'XYZ'));
+	    $data['data'] = $this->admin->get_result_array('rekapan',array( 'id_posting' => $id));
 	    foreach ($data['data'] as $key => $value) {
-	        $routing = $this->admin->get_array('members',array( 'kode_member' => $value['kode_member']));
+	        $routing = $this->admin->get_array('members',array( 'id' => $value['id_member']));
+	        $barang = $this->admin->get_array('barang',array( 'kode_barang' => $value['kode_product']));
 	        $data['data'][$key]['nama_lengkap'] = $routing['nama_lengkap'];
 	        $data['data'][$key]['nama_facebook'] = $routing['nama_facebook'];
 	        $data['data'][$key]['nomor_wa'] = $routing['nomor_wa'];
 	        $data['data'][$key]['kota'] = $routing['kota'];
+	        $data['data'][$key]['id_member'] = $routing['id'];
+	        $data['data'][$key]['nama_barang'] = $barang['nama_barang'];
 	    }
 	    // print("<pre>".print_r($data,true)."</pre>");
 	    $this->output->set_content_type('application/json')->set_output(json_encode($data));
@@ -78,6 +81,12 @@ class Comment extends CI_Controller {
 	public function data(){
 	    $id= $this->input->get("id", true);
 	    $data = $this->admin->get_array('postingan',array( 'id_posting' => $id));
+	    $this->output->set_content_type('application/json')->set_output(json_encode($data));
+	}
+	public function wa(){
+	    $no= $this->input->post("nomor", true);
+	    $msg= $this->input->post("msg", true);
+	    $data = $this->admin->kirim_wa($no,$msg);
 	    $this->output->set_content_type('application/json')->set_output(json_encode($data));
 	}
 

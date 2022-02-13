@@ -64,7 +64,6 @@ class Members extends CI_Controller {
             6=>'kecamatan',
             7=>'kota',
             8=>'provinsi',
-            9=>'kode_member',
         );
         $valid_sort = array(
             0=>'id',
@@ -76,7 +75,6 @@ class Members extends CI_Controller {
             6=>'kecamatan',
             7=>'kota',
             8=>'provinsi',
-            9=>'kode_member',
         );
         if(!isset($valid_sort[$col]))
         {
@@ -125,7 +123,6 @@ class Members extends CI_Controller {
                         $r->kecamatan,
                         $r->kota,
                         $r->provinsi,
-                        $r->kode_member,
                         '<button type="button" rel="tooltip" class="btn btn-warning btn-sm " onclick="editmodal(this)"  data-id="'.$r->id.'"  >
                           <i class="icofont icofont-ui-edit"></i>Edit
                         </button>

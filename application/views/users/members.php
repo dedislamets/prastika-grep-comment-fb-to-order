@@ -29,11 +29,11 @@
                     <th class="wd-15p">Email</th>
                     <th class="wd-20p">No WA</th>
                     <th class="wd-15p">Nama Lengkap</th>
+                    <th class="wd-15p">Facebook</th>
                     <th class="wd-10p">Kelurahan</th>
                     <th class="wd-25p">Kecamatan</th>
                     <th class="wd-25p">Kota</th>
                     <th class="wd-25p">Provinsi</th>
-                    <th class="wd-25p">Kode Member</th>
 
                   </tr>
                 </thead>

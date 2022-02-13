@@ -1,51 +1,66 @@
-<div class="card z-depth-0">
-    <div class="card-header back-green" style="color:#fff;background-color: green;">
-        <div class="row">
-            <div class="col-xl-10">
-                <h4>Master Linen</h4>
-                <span>Halaman Utama ini menampilkan informasi linen</span>
-            </div>
-            <div class="col-xl-2">
-                <a class="btn btn-block btn-dark btn-rounded" id="btnAdd" href="<?= base_url() ?>barang/create"><i class="fa fa-plus"></i>&nbsp; Tambah baru</a>
-            </div>
+<div class="sh-breadcrumb">
+    <nav class="breadcrumb">
+      <a class="breadcrumb-item" href="#">Barang</a>
+    </nav>
+</div>
+<div class="sh-pagetitle">
+    <div class="input-group"></div>
+    <div class="sh-pagetitle-left">
+        <div class="sh-pagetitle-icon"><i class="icon ion-ios-list"></i></div>
+        <div class="sh-pagetitle-title">
+            <h2>Data Barang</h2>
         </div>
     </div>
-    <div class="card-block" style="padding: 10px;">
-        <div class="dt-responsive table-responsive">
-            <table id="ViewTable" class="table table-striped">
-                <thead class="text-primary">
-                    <tr>
-                        <th style="width: 100px">
-                          Serial
-                        </th>
-                        <th style="width: 250px">
-                          Nama Barang
-                        </th>
-                        <th>
-                          Spesifikasi
-                        </th>
-                        <th>
-                          Ruangan
-                        </th>
-                        <th>
-                          Jenis
-                        </th>
-                        <th>
-                          Berat (Kg)
-                        </th>
-                        <th>
-                          Harga
-                        </th>
-                        
-                        <th>
-                          Aksi
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                  
-                </tbody>
-            </table>
+</div>
+
+<div class="sh-pagebody">
+
+    <div class="card bd-primary">
+        <div class="card-header bg-primary tx-white">List Data Members
+            <div class="pull-right">
+                <a class="btn btn-block btn-dark btn-rounded" id="btnAdd" href="<?= base_url() ?>barang/create"><i class="fa fa-plus"></i>&nbsp; Tambah</a>
+            </div>
+        </div>
+        <div class="card-body pd-sm-30">
+
+            <div class="table-wrapper">
+                <table id="ViewTable" class="table table-striped">
+                    <thead class="text-primary">
+                        <tr>
+                            <th style="width: 100px">
+                              Kode Barang
+                            </th>
+                            <th style="width: 250px">
+                              Nama Barang
+                            </th>
+                            <th>
+                              Warna
+                            </th>
+                            <th>
+                              Spesifikasi
+                            </th>
+                            <th>
+                              Stok
+                            </th>
+                            <th>
+                              Berat(Kg)
+                            </th>
+                            <th>
+                              Harga
+                            </th>
+                            <th>
+                              Status
+                            </th>
+                            <th>
+                              Aksi
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

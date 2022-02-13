@@ -12,8 +12,10 @@
     <link href="<?= base_url() ?>assets/main/lib/Ionicons/css/ionicons.css" rel="stylesheet">
     <link href="<?= base_url() ?>assets/main/lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
     <link href="<?= base_url() ?>assets/main/lib/datatables/jquery.dataTables.css" rel="stylesheet">
-    <!-- Shamcey CSS -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/main/css/shamcey.css">
+    <style type="text/css">
+      label.error { float: none; color: red; padding-left: 0px; vertical-align: bottom; }
+    </style>
   </head>
 
   <body>
@@ -28,7 +30,17 @@
       <label class="sh-sidebar-label">Navigation</label>
       <ul class="nav">
         <li class="nav-item">
-          <a href="dashboard" class="nav-link active">
+          <a href="#" class="nav-link with-sub">
+            <i class="icon ion-ios-navigate-outline"></i>
+            <span>Master</span>
+          </a>
+          <ul class="nav-sub">
+            <li class="nav-item"><a href="<?= base_url() ?>barang" class="nav-link">Barang</a></li>
+            <li class="nav-item"><a href="map-vector.html" class="nav-link">User</a></li>
+          </ul>
+        </li><!-- nav-item -->
+        <li class="nav-item">
+          <a href="<?= base_url() ?>dashboard" class="nav-link active">
             <i class="icon ion-ios-home-outline"></i>
             <span>Posting & Comment</span>
           </a>
@@ -40,19 +52,19 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="members" class="nav-link">
+          <a href="<?= base_url() ?>members" class="nav-link">
             <i class="icon ion-ios-bookmarks-outline"></i>
             <span>Members</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="register" class="nav-link">
+          <a href="<?= base_url() ?>register" class="nav-link">
             <i class="icon ion-ios-bookmarks-outline"></i>
             <span>Register</span>
           </a>
         </li>
         <li class="nav-item">
-          <a href="setup" class="nav-link">
+          <a href="<?= base_url() ?>setup" class="nav-link">
             <i class="icon ion-ios-gear-outline"></i>
             <span>Setting</span>
           </a>
@@ -63,25 +75,6 @@
     <div class="sh-headpanel">
       <div class="sh-headpanel-left">
 
-        <!-- START: HIDDEN IN MOBILE -->
-        <a href="#" class="sh-icon-link">
-          <div>
-            <i class="icon ion-ios-folder-outline"></i>
-            <span>Directory</span>
-          </div>
-        </a>
-        <a href="#" class="sh-icon-link">
-          <div>
-            <i class="icon ion-ios-calendar-outline"></i>
-            <span>Events</span>
-          </div>
-        </a>
-        <a href="#" class="sh-icon-link">
-          <div>
-            <i class="icon ion-ios-gear-outline"></i>
-            <span>Settings</span>
-          </div>
-        </a>
         <!-- END: HIDDEN IN MOBILE -->
 
         <!-- START: DISPLAYED IN MOBILE ONLY -->
@@ -241,12 +234,35 @@
     <script src="<?= base_url() ?>assets/main/js/shamcey.js"></script>
     <script src="<?= base_url() ?>assets/main/lib/datatables/jquery.dataTables.js"></script>
     <script src="<?= base_url() ?>assets/main/lib/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="<?= base_url(); ?>assets/js/plugins/jquery.validate.min.js"></script>
+    <script src="<?= base_url(); ?>assets/js/sweetalert2.js"></script>
     <!-- <script src="<?= base_url() ?>assets/main/js/dashboard.js"></script> -->
     <?php
       $this->load->view($js); 
     ?>
     <script type="text/javascript">
+      function alertOK(href="") {
+         Swal.fire({ title: "Berhasil disimpan..!",
+             text: "",
+             timer: 2000,
+             icon: 'success',
+             showConfirmButton: false,
+             willClose: () => {
+               if(href != "")
+                  href;
+            }
+          });
+      }
 
+      function alertError(textError = "'Silahkan cek kembali data anda!'") {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: textError,
+            showConfirmButton: false,
+            timer: 2000,
+          })
+      }
       Pusher.logToConsole = true;
       var pusher = new Pusher('f8ccc036c27f4bcfb7a7', {
         cluster: 'ap1'
