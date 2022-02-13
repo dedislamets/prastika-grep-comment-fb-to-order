@@ -107,6 +107,7 @@
 
               setInterval(function () {
                 that.getOnlyLastComment();
+                that.loadRekap();
               }, 10000);
               
             }
@@ -173,6 +174,7 @@
 
               setInterval(function () {
                 that.getOnlyLastComment();
+                that.loadRekap();
               }, 10000);
             }
           });

@@ -1,9 +1,9 @@
 <?php
 
 class Mutasi{
-	private $api_url = 'API_URL';
-	private $api_token = 'YOUR_TOKEN';
-	private $serverIpAddress = 'OUR_SERVER_IP_ADDRESS';
+	private $api_url = 'https://ruang-mutasi.com/api';
+	private $api_token = 'C9eE8nfVMkXH3IZByK0DdOtwaq54RWPgQulhNTcF';
+	private $serverIpAddress = '103.103.175.102';
 
 	public function __construct(){
 

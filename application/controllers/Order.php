@@ -1,20 +1,13 @@
 <?php
-/* 
-	Contoh Controller 
-*/
-
-class Mutasi extends CI_Controller {
-
+defined('BASEPATH') OR exit('No direct script access allowed');
+class Order extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->library('Mutasi',null, 'mutasi');
 	}
 
-	/*
-		anda dapat mengakses callback melalui 
-		http://domain-anda.com/example/callback
-	*/
 	public function callback(){
+		// echo "string";
 		$data = $this->mutasi->callback();
 		if(isset($data['status']) && $data['status']==true){
 			//do something with this data
