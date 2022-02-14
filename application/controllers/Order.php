@@ -29,6 +29,21 @@ class Order extends CI_Controller {
 	          	$this->db->where('kode_order', $cek_kode['kode_order']);
 	          	$result  =  $this->db->update('rekapan');  
 
+	          	$member = $this->admin->get_array('members',array( 'id' => $cek_kode['id_member'] ));
+	          	$msg = "*Pembayaran Diterima*
+-----------------------------------
+NO INVOICE : ". $cek_kode['kode_order'] ."
+BANK: ". $response['data'][0]->bank_name ."
+TANGGAL: ". $response['data'][0]->created ."
+REKENING : ". $response['data'][0]->account_number ."
+TOTAL : ". number_format($credit) ."
+
+------------------------------------
+*Note : Pembayaran berhasil, pesanan anda akan segera kami proses.*
+
+_Tim Prastika Collection_";
+    $this->admin->kirim_wa($member['nomor_wa'], $msg);
+
 		    }
 
 		}

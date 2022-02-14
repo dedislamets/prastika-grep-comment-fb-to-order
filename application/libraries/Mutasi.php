@@ -91,19 +91,17 @@ class Mutasi{
 		$response['status']=false;
 		$data = json_decode(file_get_contents('php://input'));
 
-		// if($this->get_client_ip()!=$this->serverIpAddress){
-		// 	$response['msg']='ip not valid';
-		// }elseif(!empty($data)){
-		// 	$response['status']=true;
-		// 	$response['data']=$data;
-		// }elseif(isset($_POST) && !empty($_POST)){
-		// 	$response['status']=true;
-		// 	$response['data']=$_POST;
-		// }else{
-		// 	$response['msg']='unknown request';
-		// }
-		$response['status']=true;
-		$response['data']=$data;
+		if($this->get_client_ip()!=$this->serverIpAddress){
+			$response['msg']='ip not valid';
+		}elseif(!empty($data)){
+			$response['status']=true;
+			$response['data']=$data;
+		}elseif(isset($_POST) && !empty($_POST)){
+			$response['status']=true;
+			$response['data']=$_POST;
+		}else{
+			$response['msg']='unknown request';
+		}
 		return $response;
 	}
 

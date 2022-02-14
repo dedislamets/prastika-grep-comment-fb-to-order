@@ -100,7 +100,7 @@ KOTA : ". $this->input->post('kota',true) ."
     $this->db->trans_begin();
     $barang = $this->admin->get_array('barang',array( 'kode_barang' => $arr_kode[0]));
     $member = $this->admin->get_array('members',array( 'id' => $arr_kode[2]));
-    $exist = $this->admin->get_array('rekapan',array( 'kode_comment' => $this->input->get('kode',true), 'status' => 'Booking'));
+    $exist = $this->admin->get_array('rekapan',array( 'kode_comment' => $this->input->get('kode',true), 'id_posting' => $this->input->get('id_posting',true)));
     if(empty($exist)){
 
         $data = array(
