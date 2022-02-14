@@ -28,12 +28,13 @@
               <div class="media">
                 <img src="<?= base_url() ?>assets/main/img/img9.jpg" class="wd-50 rounded-circle" alt="">
                 <div class="media-body mg-l-20">
-                  <h6 class="tx-15 mg-b-5"><a href="#">{{ log.story }}</a></h6>
-                  <p class="mg-b-20">Posting date: <a href="#">{{ moment(log.created_time).fromNow() }}</a></p>
-                  <h3>{{ log.message }}</h3>
-                  <div v-if="log.full_picture" class="mg-b-10">
+                  <h3>{{ log.title }}</h3>
+                  <div v-html="log.embed_html"></div>
+                  <p class="mg-b-20">Posting date: <a href="#">{{ moment(log.creation_time).fromNow() }}</a></p>
+                  
+                  <!-- <div v-if="log.full_picture" class="mg-b-10">
                     <img :src="log.full_picture" style="width: 200px">
-                  </div>
+                  </div> -->
                   <p class="mg-b-0">
                     <a :href="'<?= base_url()?>comment?id=' +log.id" class="btn btn-success pd-sm-x-20 mg-sm-r-5">Lihat Comment</a>
                   </p>

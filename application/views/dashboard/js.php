@@ -19,7 +19,8 @@
       loadPosting: function(){
         var that = this;
         var sParam = { access_token : that.token};
-        var link = 'https://graph.facebook.com/' + that.id_group + '/feed?fields=message,story,id,created_time,full_picture';
+        // var link = 'https://graph.facebook.com/' + that.id_group + '/feed?fields=message,story,id,created_time,full_picture';
+        var link = 'https://graph.facebook.com/me/live_videos?fields=title,embed_html,id,creation_time'
         $.get(link,sParam, function(data){  
           that.list_posting=data.data;
         },'json');

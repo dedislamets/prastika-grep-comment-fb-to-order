@@ -26,15 +26,15 @@
             <div class="media-list">
               <template>
                 <div class="media">
-                  <img src="<?= base_url() ?>assets/main/img/img9.jpg" class="wd-50 rounded-circle" alt="">
+                  <!-- <img src="<?= base_url() ?>assets/main/img/img9.jpg" class="wd-50 rounded-circle" alt=""> -->
                   <div class="media-body mg-l-20">
-                    <h6 class="tx-15 mg-b-5"><a href="#">{{ list_posting.story }}</a></h6>
                     <p class="mg-b-20">Posting date: <a href="#">{{ moment(list_posting.created_time).fromNow() }}</a></p>
-                    {{ list_posting.message }}
-                    <div v-if="list_posting.full_picture" class="mg-b-10">
+                    <h4>{{ list_posting.title }}</h4>
+                    <!-- <div v-if="list_posting.full_picture" class="mg-b-10">
                       <img :src="list_posting.full_picture" style="width: 200px" class="img-responsive">
-                    </div>
-                  </div><!-- media-body -->
+                    </div> -->
+                    <div v-html="list_posting.embed_html"></div>
+                  </div>
                 </div><!-- media -->
               </template>
             </div>
@@ -58,9 +58,8 @@
                         </div>
                       </div> -->
                     </div><!-- media -->
-                    <div class="mg-t-20 mg-md-t-0 tx-12 d-flex align-items-center">
-                      <a href="#" class="mg-r-10">Report</a>
-                      <a href="#"><i class="icon ion-more tx-16"></i></a>
+                    <div class="mg-t-20 mg-md-t-0 tx-15 d-flex align-items-center">
+                      <a href="javascript:void(0)" @click="refresh" class="mg-r-10">Refresh</a>
                     </div>
                   </div><!-- d-flex -->
                 </div><!-- card-header -->
@@ -71,7 +70,7 @@
                         <!-- <img src="<?= base_url() ?>assets/main/img/img10.jpg" class="wd-40 rounded-circle mg-r-20" alt=""> -->
                         <div class="media-body tx-13">
                           <div class="pd-10 bg-gray-200 d-inline-block" style="border-radius: 10px;">
-                            <div style="font-weight: bold;">{{ log.id }} : </div> {{ log.message }}
+                            <div style="font-weight: bold;text-decoration: underline;">{{ log.id }} : </div> {{ log.message }}
                           </div>
                           
                           <span class="tx-11 tx-gray-500 mg-l-5">{{ moment(log.created_time).fromNow() }}</span>
@@ -89,10 +88,28 @@
 
       </div>
       <div class="col-lg-4 mg-t-20 mg-lg-t-0">
-
+        <div class="row row-xs">
+          <div class="col-6 col-sm-4 col-md">
+            <a href="#" class="shortcut-icon">
+              <div>
+                <div style="font-size: 40px;">{{ total_rekap.total }}</div>
+                <span>Total Rekap</span>
+              </div>
+            </a>
+          </div><!-- col -->
+          <div class="col-6 col-sm-4 col-md">
+            <a href="#" class="shortcut-icon">
+              <div>
+                <div style="font-size: 40px;">{{ total_qty }}</div>
+                <span>Total Terjual</span>
+              </div>
+            </a>
+          </div><!-- col -->
+          
+        </div>
         <div class="card bd-primary mg-t-20">
           <div class="card-header bg-primary tx-white">
-            Book Order
+            Rekapan
           </div><!-- card-header -->
           <div class="card-body tab-content">
             <div class="media-list">
@@ -127,17 +144,17 @@
           </button>
         </div>
         <div class="modal-body pd-25">
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label>Format Order</label>
             <input type="text" id="format_order" name="format_order" class="form-control" v-model:value="format_order"  />
-          </div>  
+          </div>  --> 
           <div class="form-group">
             <label>Aktif</label><br>
             <input type="checkbox" id="status" name="status" v-model="selected"/>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-success pd-x-20" @click="saveData">Simpan</button>
+          <button type="button" class="btn btn-success btn-block pd-x-20" @click="saveData">Simpan</button>
         </div>
       </div>
     </div><!-- modal-dialog -->

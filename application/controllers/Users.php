@@ -14,9 +14,7 @@ class Users extends CI_Controller {
 	{		
 		if($this->admin->logged_id())
     {
-      if(CheckMenuRole('users')){
-        redirect("errors");
-      }
+  
 			$data['title'] = 'Master Users';
 			$data['main'] = 'users/list';
 			$data['js'] = 'script/users';
@@ -26,7 +24,6 @@ class Users extends CI_Controller {
 
     }else{
         redirect("login");
-
     }				  
 						
 	}

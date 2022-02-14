@@ -13,61 +13,82 @@ class Register extends CI_Controller {
 			$data['title'] = 'Register';
 			// $data['main'] = 'dashboard/register';
 			$data['js'] = 'script/register';
+            $data['provinsi'] = $this->db->query("select distinct province from master_city")->result();
+            // $data['kota'] = $this->db->query('select distinct kota from master_city')->result();
+            // $data['kecamatan'] = $this->db->query("select distinct kecamatan from master_city")->result();
+            // $data['kelurahan'] = $this->db->query("select distinct kelurahan from master_city")->result();
 			$this->load->view('register',$data,FALSE); 		  
 						
 	}
 
-  public function Daftar()
-  {       
-    $response = [];
-    $response['error'] = TRUE; 
-    $response['msg']= "Gagal menyimpan.. Terjadi kesalahan pada sistem";
-    $recLogin = $this->session->userdata('user_id');
-    $kode = "M-" . date("ymd-his");
-    $data = array(
-        'email'   => $this->input->post('email',true),
-        'nomor_wa'   => $this->input->post('nomor_wa',true),
-        'nama_lengkap'   => $this->input->post('nama_lengkap',true),
-        'nama_facebook'   => $this->input->post('nama_facebook',true),
-        'alamat'   => $this->input->post('alamat_lengkap',true),
-        'kelurahan'   => $this->input->post('kelurahan',true),
-        'kecamatan'   => $this->input->post('kecamatan',true),
-        'kota'   => $this->input->post('kota',true),
-        'provinsi'   => $this->input->post('provinsi',true),
-        'kode_member' => $kode
-    );
-
-    $this->db->trans_begin();
-
-    if($this->input->post('id_members',true) != "") {
-
-        $this->db->set($data);
-        $this->db->where('id', $this->input->post('id_members',true));
-        $result  =  $this->db->update('members');  
-
-        if(!$result){
-            print("<pre>".print_r($this->db->error(),true)."</pre>");
-        }else{
-            $response['error']= FALSE;
-        }
-    }else{  
-
-        $result  = $this->db->insert('members', $data);
-        $last_id = $this->db->insert_id();
-        if(!$result){
-            print("<pre>".print_r($this->db->error(),true)."</pre>");
-        }else{
-            $response['error']= FALSE;
-        }
+    public function getKota()
+    {
+        $data = $this->db->query("select distinct kota from master_city where province='" . $this->input->get('prov',true) ."'")->result();
+        $this->output->set_content_type('application/json')->set_output(json_encode($data));
     }
 
-    $this->db->trans_complete();                      
-    $this->session->set_flashdata('message', 'Selamat anda sudah terdaftar di Prastika Collection <br><br>
-      <div style="color: darkblue;font-weight: bold;text-align:center">ID MEMBER :<br>' . $last_id . '</div><br>
-      Harap simpan kode member ini untuk bertransaksi di facebook setiap saat.<br><div style="font-size:15px;font-weight:600">**Anda bisa kembali ke Facebook untuk bertransaksi.</div>');
+    public function getKecamatan()
+    {
+        $data = $this->db->query("select distinct kecamatan from master_city where kota='" . $this->input->get('kota',true) ."'")->result();
+        $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    }
+    public function getKelurahan()
+    {
+        $data = $this->db->query("select distinct kelurahan from master_city where kecamatan='" . $this->input->get('kec',true) ."'")->result();
+        $this->output->set_content_type('application/json')->set_output(json_encode($data));
+    }
+
+    public function Daftar()
+    {       
+        $response = [];
+        $response['error'] = TRUE; 
+        $response['msg']= "Gagal menyimpan.. Terjadi kesalahan pada sistem";
+        $recLogin = $this->session->userdata('user_id');
+        $kode = "M-" . date("ymd-his");
+        $data = array(
+            'email'   => $this->input->post('email',true),
+            'nomor_wa'   => $this->input->post('nomor_wa',true),
+            'nama_lengkap'   => $this->input->post('nama_lengkap',true),
+            'nama_facebook'   => $this->input->post('nama_facebook',true),
+            'alamat'   => $this->input->post('alamat_lengkap',true),
+            'kelurahan'   => $this->input->post('kelurahan',true),
+            'kecamatan'   => $this->input->post('kecamatan',true),
+            'kota'   => $this->input->post('kota',true),
+            'provinsi'   => $this->input->post('provinsi',true),
+            'kode_member' => $kode
+        );
+
+        $this->db->trans_begin();
+
+        if($this->input->post('id_members',true) != "") {
+
+            $this->db->set($data);
+            $this->db->where('id', $this->input->post('id_members',true));
+            $result  =  $this->db->update('members');  
+
+            if(!$result){
+                print("<pre>".print_r($this->db->error(),true)."</pre>");
+            }else{
+                $response['error']= FALSE;
+            }
+        }else{  
+
+            $result  = $this->db->insert('members', $data);
+            $last_id = $this->db->insert_id();
+            if(!$result){
+                print("<pre>".print_r($this->db->error(),true)."</pre>");
+            }else{
+                $response['error']= FALSE;
+            }
+        }
+
+        $this->db->trans_complete();                      
+        $this->session->set_flashdata('message', 'Selamat anda sudah terdaftar di Prastika Collection <br><br>
+        <div style="color: darkblue;font-weight: bold;text-align:center">ID MEMBER :<br>' . $last_id . '</div><br>
+        Harap simpan kode member ini untuk bertransaksi di facebook setiap saat.<br><div style="font-size:15px;font-weight:600">**Anda bisa kembali ke Facebook untuk bertransaksi.</div>');
 
 
-    $msg = "*Selamat anda sudah terdaftar di Prastika Collection*
+        $msg = "*Selamat anda sudah terdaftar di Prastika Collection*
 ==================================================
 ID MEMBER : ". $last_id ."
 EMAIL: ". $this->input->post('email',true) ."
@@ -75,10 +96,10 @@ NOMOR : ". $this->input->post('nomor_wa',true) ."
 KOTA : ". $this->input->post('kota',true) ."
 
 *Note : **Harap simpan kode member ini untuk bertransaksi di facebook setiap saat. Anda bisa kembali ke Facebook untuk bertransaksi.*";
-    $this->admin->kirim_wa($this->input->post('nomor_wa',true), $msg);
+        $this->admin->kirim_wa($this->input->post('nomor_wa',true), $msg);
 
-    redirect('Register');
-  }
+        redirect('Register');
+    }
   
   public function Rekap()
   {       

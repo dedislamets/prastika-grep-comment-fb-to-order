@@ -22,7 +22,7 @@ class Comment extends CI_Controller {
 				$curl = curl_init();
 
 				curl_setopt_array($curl, array(
-				  	CURLOPT_URL => 'https://graph.facebook.com/' . $this->input->get('id',true) . '?fields=full_picture,message,story,created_time&access_token=' . $config['token'],
+				  	CURLOPT_URL => 'https://graph.facebook.com/' . $this->input->get('id',true) . '?access_token=' . $config['token'],
 				  	CURLOPT_RETURNTRANSFER => true,
 				  	CURLOPT_ENCODING => '',
 				  	CURLOPT_MAXREDIRS => 10,
@@ -42,8 +42,8 @@ class Comment extends CI_Controller {
 			    if(empty($exist)){
 			    	$data = array(
 				        'id_posting'  => $response['id'],
-				        'content' => $response['message'],
-				        'full_picture' => (empty($response['full_picture'])? '' : $response['full_picture']),
+				        'content' => $response['title'],
+				        'full_picture' => $response['embed_html'],
 				        'format_order'  => '',
 				        'status'		=> 'Aktif'
 				        
@@ -65,6 +65,7 @@ class Comment extends CI_Controller {
 	public function rekap(){
 	    $id= $this->input->get("id");
 	    $data['data'] = $this->admin->get_result_array('rekapan',array( 'id_posting' => $id));
+	    $qty=0;
 	    foreach ($data['data'] as $key => $value) {
 	        $routing = $this->admin->get_array('members',array( 'id' => $value['id_member']));
 	        $barang = $this->admin->get_array('barang',array( 'kode_barang' => $value['kode_product']));
@@ -74,7 +75,12 @@ class Comment extends CI_Controller {
 	        $data['data'][$key]['kota'] = $routing['kota'];
 	        $data['data'][$key]['id_member'] = $routing['id'];
 	        $data['data'][$key]['nama_barang'] = $barang['nama_barang'];
+
+	        $qty +=(int)$value['qty'];
 	    }
+	    $data['total_qty'] = $qty;
+	    $data['total_rekap'] = $this->db->query("select count(*) as total from rekapan where id_posting='". $id ."'")->row_array();;
+
 	    // print("<pre>".print_r($data,true)."</pre>");
 	    $this->output->set_content_type('application/json')->set_output(json_encode($data));
 	}

@@ -36,7 +36,7 @@
           </a>
           <ul class="nav-sub">
             <li class="nav-item"><a href="<?= base_url() ?>barang" class="nav-link">Barang</a></li>
-            <li class="nav-item"><a href="map-vector.html" class="nav-link">User</a></li>
+            <li class="nav-item"><a href="<?= base_url() ?>users" class="nav-link">Users</a></li>
           </ul>
         </li><!-- nav-item -->
         <li class="nav-item">
@@ -59,8 +59,8 @@
         </li>
         <li class="nav-item">
           <a href="<?= base_url() ?>register" class="nav-link">
-            <i class="icon ion-ios-bookmarks-outline"></i>
-            <span>Register</span>
+            <i class="icon ion-ios-filing-outline"></i>
+            <span>Form Register</span>
           </a>
         </li>
         <li class="nav-item">

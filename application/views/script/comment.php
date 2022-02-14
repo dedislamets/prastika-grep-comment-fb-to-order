@@ -22,7 +22,9 @@
       selected: false,
       format_order: '',
       token: '<?= $config['token'] ?>',
-      id_group: '<?= $config['id_group'] ?>'
+      id_group: '<?= $config['id_group'] ?>',
+      total_rekap: 0,
+      total_qty: 0
     },
     methods: {
       loadinit: function(){
@@ -30,13 +32,19 @@
         this.loadRekap();
         
       },
+      refresh(event){
+        this.loadComment();
+        this.loadRekap();
+      },
       showModal: function(){
         $("#Modal").modal({backdrop: 'static', keyboard: false}) ;  
       },
       loadPosting: function(){
         var that = this;
         var sParam = { access_token : that.token};
-        var link = 'https://graph.facebook.com/' + that.id + '?fields=full_picture,message,story,created_time';
+        // var link = 'https://graph.facebook.com/' + that.id + '?fields=full_picture,message,story,created_time';
+        var link = 'https://graph.facebook.com/' + that.id ;
+
         $.get(link,sParam, function(data){
           that.list_posting=data;
         },'json');
@@ -46,6 +54,8 @@
         $.get('<?= base_url()?>comment/rekap', {id: that.id}, function(data){ 
           console.log('rekap');
           that.list_rekap = data.data;
+          that.total_rekap =  data.total_rekap;
+          that.total_qty =  data.total_qty;
         })
       },
       saveData: function(){
