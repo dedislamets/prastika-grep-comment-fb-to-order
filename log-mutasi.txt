@@ -1,0 +1,1 @@
+{"status":true,"data":[{"id":"1","account_id":"79","date":"2022-02-14","debet":100633,"credit":0,"start_balance":"0","end_balance":-100633,"description":"ODR-220214-104325","created":"2022-02-14 16:52:10","bank_name":"BCA Personal","bank_code":"BCA","api_key":"C9eE8nfVMkXH3IZByK0DdOtwaq54RWPgQulhNTcF","account_number":"4940124650"}]}

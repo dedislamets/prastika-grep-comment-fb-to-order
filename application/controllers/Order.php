@@ -8,21 +8,20 @@ class Order extends CI_Controller {
 	}
 
 	public function callback(){
-		// echo "string";
 		$data = $this->mutasi->callback();
 		if(isset($data['status']) && $data['status']==true){
 			//do something with this data
 			file_put_contents('log-mutasi.txt',json_encode($data)."\n", FILE_APPEND);
-			$response = json_encode($data);
+			$response = $data;
 
-			$debet = $response['data'][0]['debet'];
+			$debet = $response['data'][0]->debet;
 
 			$cek_kode = $this->admin->get_array('rekapan',array( 'total' => $debet, 'status' => 'Booking'));
 		    if(!empty($cek_kode)){
 		        
 				$data = array(
-			        'metode_bayar'  => $response['data'][0]['bank_name'],
-			        'payment_date' => $response['data'][0]['created'],
+			        'metode_bayar'  => $response['data'][0]->bank_name,
+			        'payment_date' => $response['data'][0]->created,
 			        'status'         => 'Payment',
 			    );
 
