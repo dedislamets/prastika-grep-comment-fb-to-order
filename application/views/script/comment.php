@@ -130,6 +130,9 @@
 
             var ids = new Set(that.list_comment.map(d => d.id));
             var merged = [...that.list_comment, ...next_data.data.data.filter(d => !ids.has(d.id))];
+            merged = merged.sort(function(a,b) {
+                return moment(b.created_time)-moment(a.created_time)
+            });
             console.log(merged);
             that.list_comment = merged;
             if(that.status == 'Aktif'){

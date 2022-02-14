@@ -46,9 +46,9 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="index.html" class="nav-link">
+          <a href="<?= base_url() ?>order" class="nav-link">
             <i class="icon ion-ios-list-outline"></i>
-            <span>Penjualan</span>
+            <span>Order</span>
           </a>
         </li>
         <li class="nav-item">

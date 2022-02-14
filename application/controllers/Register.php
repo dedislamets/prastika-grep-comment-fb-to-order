@@ -87,7 +87,7 @@ KOTA : ". $this->input->post('kota',true) ."
     $response['msg']= "Gagal menyimpan.. Terjadi kesalahan pada sistem";
     
     $arr_kode = explode("/", $this->input->get('kode',true));
-    $kode = "ODR/" . date("ymd-his");
+    $kode = "ODR-" . date("ymd-his");
     $data = array(
         'kode_order'  => $kode,
         'id_member' => $arr_kode[2],
