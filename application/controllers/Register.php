@@ -86,7 +86,15 @@ KOTA : ". $this->input->post('kota',true) ."
     $response['error'] = TRUE; 
     $response['msg']= "Gagal menyimpan.. Terjadi kesalahan pada sistem";
     
+    random:
+    $kode_rand = rand(100,1000); 
     $arr_kode = explode("/", $this->input->get('kode',true));
+
+    $cek_kode = $this->admin->get_array('rekapan',array( 'kode_rand' => $kode_rand, 'status' => 'Booking'));
+    if(!empty($cek_kode)){
+        goto random;
+    }
+
     $kode = "ODR-" . date("ymd-his");
     $data = array(
         'kode_order'  => $kode,
@@ -95,7 +103,8 @@ KOTA : ". $this->input->post('kota',true) ."
         'kode_product' => $arr_kode[0],
         'pesan'       => $this->input->get('pesan',true),
         'id_posting'  => $this->input->get('id_posting',true),
-        'kode_comment'  => $this->input->get('kode',true)
+        'kode_comment'  => $this->input->get('kode',true),
+        'kode_rand'     => $kode_rand
     );
 
     $this->db->trans_begin();
@@ -125,7 +134,7 @@ Bank Transfer
 
 BCA 0183139867
 Hendra Ardiansyah (otomatis sekitar 5 - 10 menit)
-Rp ". number_format((int)$arr_kode[1] * (float)$barang['harga']) ."
+Rp ". number_format(((int)$arr_kode[1] * (float)$barang['harga']) + $kode_rand) ."
 
 Invoice expired 2022-02-12 21:39:40
 

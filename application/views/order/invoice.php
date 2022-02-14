@@ -79,8 +79,12 @@
                   <p class="tx-13">Ini adalah bukti sah transaksi anda. </p>
                 </div>
               </td>
-              <td class="tx-right">Sub-Total</td>
+              <td class="tx-right">SubTotal</td>
               <td colspan="2" class="tx-right"><?= number_format($header['qty'] * $header['harga']) ?></td>
+            </tr>
+            <tr>
+              <td class="tx-right">Extra Fee</td>
+              <td colspan="2"  class="tx-right"><?= $header['kode_rand'] ?></td>
             </tr>
             <tr>
               <td class="tx-right">Ongkir</td>
@@ -88,7 +92,7 @@
             </tr>
             <tr>
               <td class="tx-right tx-uppercase tx-bold tx-inverse">Total</td>
-              <td colspan="2" class="tx-right"><h4 class="tx-primary tx-bold tx-lato"><?= number_format($header['qty'] * $header['harga']) ?></h4></td>
+              <td colspan="2" class="tx-right"><h4 class="tx-primary tx-bold tx-lato"><?= number_format(($header['qty'] * $header['harga'])+ (int) $header['kode_rand'] ) ?></h4></td>
             </tr>
           </tbody>
         </table>
