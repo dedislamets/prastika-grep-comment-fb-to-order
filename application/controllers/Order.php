@@ -14,9 +14,9 @@ class Order extends CI_Controller {
 			file_put_contents('log-mutasi.txt',json_encode($data)."\n", FILE_APPEND);
 			$response = $data;
 
-			$debet = $response['data'][0]->debet;
+			$credit = $response['data'][0]->credit;
 
-			$cek_kode = $this->admin->get_array('rekapan',array( 'total' => $debet, 'status' => 'Booking'));
+			$cek_kode = $this->admin->get_array('rekapan',array( 'total' => $credit, 'status' => 'Booking'));
 		    if(!empty($cek_kode)){
 		        
 				$data = array(
