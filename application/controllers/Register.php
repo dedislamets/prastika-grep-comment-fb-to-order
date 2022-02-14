@@ -96,16 +96,6 @@ KOTA : ". $this->input->post('kota',true) ."
     }
 
     $kode = "ODR-" . date("ymd-his");
-    $data = array(
-        'kode_order'  => $kode,
-        'id_member' => $arr_kode[2],
-        'qty'         => $arr_kode[1],
-        'kode_product' => $arr_kode[0],
-        'pesan'       => $this->input->get('pesan',true),
-        'id_posting'  => $this->input->get('id_posting',true),
-        'kode_comment'  => $this->input->get('kode',true),
-        'kode_rand'     => $kode_rand
-    );
 
     $this->db->trans_begin();
     $barang = $this->admin->get_array('barang',array( 'kode_barang' => $arr_kode[0]));
@@ -113,13 +103,24 @@ KOTA : ". $this->input->post('kota',true) ."
     $exist = $this->admin->get_array('rekapan',array( 'kode_comment' => $this->input->get('kode',true), 'status' => 'Booking'));
     if(empty($exist)){
 
-      $result  = $this->db->insert('rekapan', $data);
-      if(!$result){
-          print("<pre>".print_r($this->db->error(),true)."</pre>");
-      }else{
-          $response['error']= FALSE;
+        $data = array(
+            'kode_order'  => $kode,
+            'id_member' => $arr_kode[2],
+            'qty'           => $arr_kode[1],
+            'kode_product'  => $arr_kode[0],
+            'pesan'         => $this->input->get('pesan',true),
+            'id_posting'    => $this->input->get('id_posting',true),
+            'kode_comment'  => $this->input->get('kode',true),
+            'kode_rand'     => $kode_rand,
+            'total'         => (((int)$arr_kode[1] * (float)$barang['harga']) + $kode_rand)
+        );
+        $result  = $this->db->insert('rekapan', $data);
+        if(!$result){
+            print("<pre>".print_r($this->db->error(),true)."</pre>");
+        }else{
+            $response['error']= FALSE;
 
-          $msg = "*Kode Rekap ". $kode ."*
+            $msg = "*Kode Rekap ". $kode ."*
 -----------------------------------
 ID MEMBER : ". $arr_kode[2] ."
 NAMA: ". $member['nama_lengkap'] ."
