@@ -13,7 +13,7 @@ class Register extends CI_Controller {
 			$data['title'] = 'Register';
 			// $data['main'] = 'dashboard/register';
 			$data['js'] = 'script/register';
-            $data['provinsi'] = $this->db->query("select distinct province from master_city")->result();
+            // $data['provinsi'] = $this->db->query("select distinct province from master_city")->result();
             // $data['kota'] = $this->db->query('select distinct kota from master_city')->result();
             // $data['kecamatan'] = $this->db->query("select distinct kecamatan from master_city")->result();
             // $data['kelurahan'] = $this->db->query("select distinct kelurahan from master_city")->result();

@@ -13,7 +13,9 @@
 
   <div class="card bd-primary">
     <div class="card-header bg-primary tx-white">List Data Users
-       
+        <div class="pull-right">
+             <button class="btn btn-block btn-dark btn-rounded" id="btnAdd"><i class="icofont icofont-ui-add"></i> Tambah baru</button>
+        </div>
     </div>
     <div class="card-body pd-sm-30">
       <table id="ViewTable" class="table table-striped">
