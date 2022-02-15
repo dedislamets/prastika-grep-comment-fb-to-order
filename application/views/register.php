@@ -256,7 +256,7 @@
   <script src="<?= base_url(); ?>assets/js/plugins/jquery.sharrre.js"></script>
   <script>
     $(document).ready(function() {
-      $.get('http://pro.rajaongkir.com/api/province?key=6257ae210b00dfa4d6cda76747341c7a', null, function(data){ 
+      $.get('https://pro.rajaongkir.com/api/province?key=6257ae210b00dfa4d6cda76747341c7a', null, function(data){ 
 
         $('#provinsi').empty();
         $.each(data,function(i,value){
