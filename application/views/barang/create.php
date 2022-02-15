@@ -75,6 +75,7 @@
         <div class="form-group row" style="margin-top: 10px;">
           <div class="col-sm-2">
             <input type="hidden" name="mode" id="mode" value="<?= $mode ?>">
+            <input type="hidden" name="old_code" id="old_code" value="<?= empty($barang)? '' : $barang['kode_barang'] ?>">
             <input type="hidden" id="csrf_token" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" >
             <button class="btn btn-success btn-sm btn-block" id="btnSave" ><i class="fa fa-save"></i> Simpan</button>
           </div>

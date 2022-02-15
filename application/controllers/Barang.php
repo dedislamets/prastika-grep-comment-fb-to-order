@@ -208,7 +208,7 @@ class Barang extends CI_Controller {
       if($this->input->post('mode') == "edit") {
 
           $this->db->set($data);
-          $this->db->where('kode_barang', $this->input->post('kode_barang'));
+          $this->db->where('kode_barang', $this->input->post('old_code'));
           $result  =  $this->db->update('barang');  
 
           if(!$result){
