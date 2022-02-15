@@ -162,7 +162,7 @@ class Members extends CI_Controller {
                 $x++;
             }                 
         }
-        $this->db->from("tb_user");
+        $this->db->from("members");
         // $this->db->join('tb_group_role', 'tb_group_role.id = tb_user.id_role','left');
         $query = $this->db->get();
       	$result = $query->row();

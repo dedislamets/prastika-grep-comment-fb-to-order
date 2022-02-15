@@ -96,7 +96,7 @@ NOMOR : ". $this->input->post('nomor_wa',true) ."
 KOTA : ". $this->input->post('kota',true) ."
 
 *Note : **Harap simpan kode member ini untuk bertransaksi di facebook setiap saat. Anda bisa kembali ke Facebook untuk bertransaksi.*";
-        $this->admin->kirim_wa($this->input->post('nomor_wa',true), $msg);
+        //$this->admin->kirim_wa($this->input->post('nomor_wa',true), $msg);
 
         redirect('Register');
     }
