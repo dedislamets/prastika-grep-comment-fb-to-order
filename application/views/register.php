@@ -67,7 +67,7 @@
                         <!-- <i class="nc-icon nc-single-02"></i> -->
                       </span>
                     </div>
-                    <input type="email" name="email" class="form-control" placeholder="Masukkan Email Anda" required />
+                    <input type="email" name="email" class="form-control" placeholder="Masukkan Email Anda" />
                     <?php echo form_error('email'); ?>
                   </div>
                   <div class="input-group">
