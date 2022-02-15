@@ -24,7 +24,7 @@
         <div class="form-group row">
           <label class="col-sm-2 col-form-label" style="font-weight: bold;">Kode Barang *</label>
           <div class="col-sm-10">
-            <input class="form-control" type="text" id="kode_barang" name="kode_barang" value="<?= empty($barang)? '' : $barang['kode_barang'] ?>" required <?= ($mode == 'Edit' ? 'readonly' : '') ?> />
+            <input class="form-control" type="text" id="kode_barang" name="kode_barang" value="<?= empty($barang)? '' : $barang['kode_barang'] ?>" required  />
           </div>
         </div>
         <div class="form-group row">
