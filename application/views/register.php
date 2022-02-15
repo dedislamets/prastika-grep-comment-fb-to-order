@@ -259,7 +259,7 @@
       $.get('https://pro.rajaongkir.com/api/province?key=6257ae210b00dfa4d6cda76747341c7a', null, function(data){ 
         var result = data.rajaongkir.results;
         $('#provinsi').empty();
-        $.each(data,function(i,value){
+        $.each(result,function(i,value){
               $('#provinsi').append('<option value="'+value.province+'">'+value.province+'</option>');
           })
       });
