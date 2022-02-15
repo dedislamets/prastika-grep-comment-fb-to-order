@@ -161,8 +161,8 @@ _Tim Prastika Collection_";
       $this->db->limit($length,$start);
       $this->db->select("rekapan.*,nama_lengkap,kode_barang,nama_barang,harga");
       $this->db->from("rekapan");
-      $this->db->join("barang","barang.kode_barang=rekapan.kode_product");
-      $this->db->join("members","members.id=rekapan.id_member");
+      $this->db->join("barang","barang.kode_barang=rekapan.kode_product",'left');
+      $this->db->join("members","members.id=rekapan.id_member",'left');
 
       $pengguna = $this->db->get();
       $data = array();
