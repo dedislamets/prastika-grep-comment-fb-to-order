@@ -14,6 +14,16 @@ class Order extends CI_Controller {
 			file_put_contents('log-mutasi.txt',json_encode($data)."\n", FILE_APPEND);
 			$response = $data;
 
+			// print("<pre>".print_r($response['data'],true)."</pre>");exit();
+			/*foreach($response['data'] as $key => $value) {
+		        $data = array(
+			        'id_provinsi'  => $value->province_id,
+			        'provinsi' 	=> $value->province,
+			    );
+
+			    $result  = $this->db->insert('tb_provinsi', $data);
+		    }*/
+
 			$credit = $response['data'][0]->credit;
 
 			$cek_kode = $this->admin->get_array('rekapan',array( 'total' => $credit, 'status' => 'Booking'));
