@@ -182,9 +182,12 @@
                   
                   
                   
-                  <!-- <div style="border: solid 1px grey;border-radius: 10px;padding: 10px;background-color: #ececec ">
-                    LANJUT ORDER DI LIVE, KETIK DEAL-CLUE-ADMIN SINAR. PELANGGAN BARU MAKSIMAL ORDER 2 BARANG JIKA LEBIH DARI 2 WAJIB DEPOSIT KE REK AN. SATYA ANDRIANA ADNAN. REKAPAN AKAN KITA KIRIM H+1 SETELAH LIVE OLEH ADMIN RESMI, KARENA LINK INI KHUSUS DAFTAR. *
-                  </div> -->
+                  <div style="border: solid 1px grey;border-radius: 10px;padding: 10px;background-color: #ececec ">
+                    LANJUT ORDER DI LIVE, KETIK #KODE_BARANG/JUMLAH_ORDER/IDMEMBER# <br>
+                    CONTOH : #001S/1/19#
+
+                    NOTE : WAJIB MENGGUNAKAN AWALAN DAN AKHIRAN #
+                  </div>
                   <br />
                   
                 </div>
