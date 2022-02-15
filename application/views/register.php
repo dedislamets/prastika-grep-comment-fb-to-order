@@ -183,8 +183,8 @@
                   
                   
                   <div style="border: solid 1px grey;border-radius: 10px;padding: 10px;background-color: #ececec ">
-                    LANJUT ORDER DI LIVE, KETIK #KODE_BARANG/JUMLAH_ORDER/IDMEMBER# <br>
-                    CONTOH : #001S/1/19#
+                    LANJUT ORDER DI LIVE, KETIK #KODE_BARANG/JUMLAH_ORDER/ID_MEMBER# <br>
+                    CONTOH : #001S/1/19#<br>
 
                     NOTE : WAJIB MENGGUNAKAN AWALAN DAN AKHIRAN #
                   </div>
