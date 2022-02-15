@@ -152,15 +152,7 @@ JUMLAH : ". $arr_kode[1] ."
 HARGA : ". number_format($barang['harga']) ."
 
 ------------------------------------
-Bank Transfer
-
-BCA 0183139867
-Hendra Ardiansyah (otomatis sekitar 5 - 10 menit)
-Rp ". number_format(((int)$arr_kode[1] * (float)$barang['harga']) + $kode_rand) ."
-
-Invoice expired 2022-02-12 21:39:40
-
-*Note : pembayaran kamu akan kami proses secara otomatis. Jika pembayaran kamu masih belum terproses, silahkan hubungi kami.*
+*Note : Harga diatas belum termasuk Ongkir.*
 
 _Tim Prastika Collection_";
     $this->admin->kirim_wa($member['nomor_wa'], $msg);
