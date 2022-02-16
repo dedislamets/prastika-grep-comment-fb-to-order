@@ -292,7 +292,9 @@ class Admin extends CI_Model
     }
     function kirim_wa($hp,$msg){
         $fields = array(
-            'token' => 'SmHVxhJd6iSnBsMj9Cc2qsvXirPTNjeuFadfzz8mmw7jiESfvC',
+            //hp dedi
+            'token' => 'ZaT2RwUa1UxucRF9tp99VaDrGm1Je8bw1iDsJXfDeBYY1GnXTY',
+            //ini hp prastika 'token' => 'SmHVxhJd6iSnBsMj9Cc2qsvXirPTNjeuFadfzz8mmw7jiESfvC', 
             //'token' => 'Fg97TQRRZ1cUk7vZhHHyEf2FsQgnmNoLRjaRpquDtyAHFu21km',
             'number' => $hp,
             'message' => $msg,
