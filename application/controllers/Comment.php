@@ -1,5 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Comment extends CI_Controller {
 	public function __construct()
 	{
@@ -115,4 +119,74 @@ class Comment extends CI_Controller {
 
         $this->output->set_content_type('application/json')->set_output(json_encode($response)); 
 	}
+
+	public function export()
+  	{
+
+        $id = $this->input->get('id',TRUE);
+
+        $this->db->select("order_date,id_member, nama_lengkap,nomor_wa,kode_comment, pesan");
+        $this->db->from("rekapan a");
+        $this->db->join('members b', 'a.id_member=b.id');
+        $this->db->where("a.id_member>0");
+        $this->db->where("id_posting", $id);
+        $this->db->order_by("order_date", 'ASC');
+        
+        $data = $this->db->get()->result();
+
+        $spreadsheet = new Spreadsheet;
+
+        $styleArray = array(
+            'borders' => array(
+                'outline' => array(
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => array('argb' => '000000'),
+                ),
+            ),
+        );
+
+        $spreadsheet->setActiveSheetIndex(0)
+          ->setCellValue('A1', 'NO')
+          ->setCellValue('B1', 'Tanggal Rekap')
+          ->setCellValue('C1', 'ID Member')
+          ->setCellValue('D1', 'Nama Member')
+          ->setCellValue('E1', 'Nomor WA')
+          ->setCellValue('F1', 'Comment')
+          ->setCellValue('G1', 'Pesan');
+
+        $spreadsheet->getActiveSheet()->getStyle('A1:G1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('f4f403');
+
+        $spreadsheet->getActiveSheet()->setTitle('Rekapan');
+
+        $i=2; 
+        foreach($data as $key=>$row) {
+
+          $spreadsheet->setActiveSheetIndex(0)
+            ->setCellValue('A'.$i, $key+1)
+            ->setCellValue('B'.$i, $row->order_date)
+            ->setCellValue('C'.$i, $row->id_member)
+            ->setCellValue('D'.$i, $row->nama_lengkap)
+            ->setCellValue('E'.$i, $row->nomor_wa)
+            ->setCellValue('F'.$i, $row->kode_comment)
+            ->setCellValue('G'.$i, $row->pesan);
+
+            $spreadsheet->getActiveSheet()->getStyle('A2:G'.$i)->applyFromArray($styleArray);
+          $i++;
+        }
+
+
+        foreach (range('A','G') as $col) {
+          $spreadsheet->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);  
+        }
+
+       
+        // exit();
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Rekapan '. $id .'.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+  	}
 }

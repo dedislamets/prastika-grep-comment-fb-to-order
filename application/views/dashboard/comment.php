@@ -60,6 +60,7 @@
                     </div><!-- media -->
                     <div class="mg-t-20 mg-md-t-0 tx-15 d-flex align-items-center">
                       <a href="javascript:void(0)" @click="refresh" class="mg-r-10">Refresh</a>
+                      <a :href="'<?= base_url()?>comment/export?id=' + id " target="_blank" class="mg-r-10">Download</a>
                     </div>
                   </div><!-- d-flex -->
                 </div><!-- card-header -->
