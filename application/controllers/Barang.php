@@ -374,11 +374,12 @@ class Barang extends CI_Controller {
             );
 
             $exist = $this->admin->get_array('barang',array( 'kode_barang' => $rowData[0]));
-            if(empty($exist)){
+            if($rowData[0] == trim($rowData[0]) && strpos($rowData[0], ' ') !== false) {
+              print_r($rowData[0] . " tidak boleh mengadung spasi.<br>");
+            }elseif(empty($exist)){
               $insert = $this->db->insert("barang",$data);
               print_r($rowData);
-            }elseif ($rowData[0] == trim($rowData[0]) && strpos($rowData[0], ' ') !== false) {
-              print_r($rowData[0] . " tidak boleh mengadung spasi.<br>");
+
             }else{
               print_r($rowData[0] . " tidak boleh duplicate.<br>");
             }

@@ -14,7 +14,6 @@ class Order extends CI_Controller {
 			file_put_contents('log-mutasi.txt',json_encode($data)."\n", FILE_APPEND);
 			$response = $data;
 
-			// print("<pre>".print_r($response['data'],true)."</pre>");exit();
 			/*foreach($response['data'] as $key => $value) {
 		        $data = array(
 			        'id_provinsi'  => $value->province_id,
@@ -23,39 +22,69 @@ class Order extends CI_Controller {
 
 			    $result  = $this->db->insert('tb_provinsi', $data);
 		    }*/
+      // print("<pre>".print_r($response['data'],true)."</pre>");
+      $list_bank= $response['data'];
 
-			$credit = $response['data'][0]->credit;
+      foreach($list_bank as $key_bank => $value_bank) {
+        $data_mutasi= $value_bank->data_mutasi;
 
-			$cek_kode = $this->admin->get_array('rekapan',array( 'total' => $credit, 'status' => 'Booking'));
-		    if(!empty($cek_kode)){
-		        
-				$data = array(
-			        'metode_bayar'  => $response['data'][0]->bank_name,
-			        'payment_date' => $response['data'][0]->created,
-			        'status'         => 'Payment',
-			    );
+        foreach($data_mutasi as $key_mutasi => $value_mutasi) {
+          $cek_mutasi = $this->admin->get_array('mutasi',array( 'id' => $value_mutasi->id));
+          if(empty($cek_mutasi)){
 
-				$this->db->set($data);
-	          	$this->db->where('kode_order', $cek_kode['kode_order']);
-	          	$result  =  $this->db->update('rekapan');  
+            //Insert Log Mutasi
+            $data = array(
+                'id'                => $value_mutasi->id,
+                'system_date'       => $value_mutasi->system_date,
+                'transaction_date'  => $value_mutasi->transaction_date,
+                'description'       => $value_mutasi->description,
+                'type'              => $value_mutasi->type,
+                'amount'            => $value_mutasi->amount,
+                'balance'           => $value_mutasi->balance,
+                'module'            => $value_bank->module,
+                'saldo_update'      => $value_bank->balance,
+                'account_id'        => $value_bank->account_id,
+                'account_name'      => $value_bank->account_name,
+                'account_number'    => $value_bank->account_number,
+            );
+            $result  = $this->db->insert('mutasi', $data);
 
-	          	$member = $this->admin->get_array('members',array( 'id' => $cek_kode['id_member'] ));
-	          	$msg = "*Pembayaran Diterima*
------------------------------------
-NO INVOICE : ". $cek_kode['kode_order'] ."
-BANK: ". $response['data'][0]->bank_name ."
-TANGGAL: ". $response['data'][0]->created ."
-REKENING : ". $response['data'][0]->account_number ."
-TOTAL : ". number_format($credit) ."
+            //Update Status Rekapan
+            $credit = $value_mutasi->amount;
 
-------------------------------------
-*Note : Pembayaran berhasil, pesanan anda akan segera kami proses.*
+            $cek_kode = $this->admin->get_array('rekapan',array( 'total' => $credit, 'status' => 'Booking'));
+            if(!empty($cek_kode)){
+                
+              $data = array(
+                  'metode_bayar'  => $response['data'][0]->bank_name,
+                  'payment_date' => $response['data'][0]->created,
+                  'status'         => 'Payment',
+              );
 
-_Tim Prastika Collection_";
-    $this->admin->kirim_wa($member['nomor_wa'], $msg);
+              $this->db->set($data);
+              $this->db->where('kode_order', $cek_kode['kode_order']);
+              $result  =  $this->db->update('rekapan');  
 
-		    }
+              $member = $this->admin->get_array('members',array( 'id' => $cek_kode['id_member'] ));
+              $msg = "*Pembayaran Diterima*
+                      -----------------------------------
+                      NO INVOICE : ". $cek_kode['kode_order'] ."
+                      BANK: ". $response['data'][0]->bank_name ."
+                      TANGGAL: ". $response['data'][0]->created ."
+                      REKENING : ". $response['data'][0]->account_number ."
+                      TOTAL : ". number_format($credit) ."
 
+                      ------------------------------------
+                      *Note : Pembayaran berhasil, pesanan anda akan segera kami proses.*
+
+                      _Tim Prastika Collection_";
+              $this->admin->kirim_wa($member['nomor_wa'], $msg);
+
+            }
+          }
+        }
+      }
+      exit();
 		}
 	}
 
