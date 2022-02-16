@@ -22,6 +22,9 @@
 
 	})
 
+	$('#btnUpload').on('click', function (event) {
+    	$('#ModalAdd').modal({backdrop: 'static', keyboard: false}) ;
+    });
 
 	function hapus(val) {
 		var r = confirm("Yakin dihapus?");

@@ -12,7 +12,7 @@ A fully RESTful server implementation for CodeIgniter using one library, one con
 ## Installation
 
 ```sh
-composer require chriskacerguis/codeigniter-restserver
+composer require chriskacerguis/ci-restserver
 ```
 
 ## Usage
@@ -29,8 +29,6 @@ or run
 composer require chriskacerguis/codeigniter-restserver
 ```
 
-Note that you will need to copy `rest.php` to your `config` directory (e.g. `application/config`)
-
 Step 1: Add this to your controller (should be before any of your code)
 
 ```php
@@ -45,10 +43,7 @@ class Example extends RestController
 
 ## Basic GET example
 
-Here is a basic example. This controller, which should be saved as `Api.php`, can be called in two ways:
-
-* `http://domain/api/users/` will return the list of all users
-* `http://domain/api/users/id/1` will only return information about the user with id = 1
+Here is a basic example of 
 
 ```php
 <?php
@@ -56,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
-class Api extends RestController {
+class Example extends REST_Controller {
 
     function __construct()
     {
@@ -68,41 +63,27 @@ class Api extends RestController {
     {
         // Users from a data store e.g. database
         $users = [
-            ['id' => 0, 'name' => 'John', 'email' => 'john@example.com'],
-            ['id' => 1, 'name' => 'Jim', 'email' => 'jim@example.com'],
+            ['id' => 1, 'name' => 'John', 'email' => 'john@example.com'],
+            ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com'],
         ];
 
-        $id = $this->get( 'id' );
+        $id = $this->get('id');
 
-        if ( $id === null )
+        if ($id === null)
         {
             // Check if the users data store contains users
-            if ( $users )
+            if ($users)
             {
                 // Set the response and exit
-                $this->response( $users, 200 );
+                $this->response($users, 200);
             }
             else
             {
                 // Set the response and exit
-                $this->response( [
+                $this->response([
                     'status' => false,
                     'message' => 'No users were found'
-                ], 404 );
-            }
-        }
-        else
-        {
-            if ( array_key_exists( $id, $users ) )
-            {
-                $this->response( $users[$id], 200 );
-            }
-            else
-            {
-                $this->response( [
-                    'status' => false,
-                    'message' => 'No such user found'
-                ], 404 );
+                ], 404);
             }
         }
     }

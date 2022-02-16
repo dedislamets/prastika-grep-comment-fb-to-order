@@ -1,5 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+require_once APPPATH.'/third_party/spout/Autoloader/autoload.php';
+use Box\Spout\Reader\ReaderFactory;
+use Box\Spout\Common\Type;
+
 class Barang extends CI_Controller {
 	public function __construct()
 	{
@@ -282,6 +290,110 @@ class Barang extends CI_Controller {
     }else{
       redirect('login');
     }
+  }
+  public function template()
+  {
+
+      $spreadsheet = new Spreadsheet;
+
+      $styleArray = array(
+          'borders' => array(
+              'outline' => array(
+                  'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                  'color' => array('argb' => '000000'),
+              ),
+          ),
+      );
+
+      $spreadsheet->setActiveSheetIndex(0)
+        ->setCellValue('A1', 'Kode')
+        ->setCellValue('B1', 'Nama Barang')
+        ->setCellValue('C1', 'Warna')
+        ->setCellValue('D1', 'Berat')
+        ->setCellValue('E1', 'Harga');
+
+      $spreadsheet->getActiveSheet()->getStyle('A1:E1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('f4f403');
+
+      $spreadsheet->getActiveSheet()->setTitle('Barang');
+
+      foreach (range('A','E') as $col) {
+        $spreadsheet->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);  
+      }
+
+     
+      // exit();
+      $writer = new Xlsx($spreadsheet);
+
+      header('Content-Type: application/vnd.ms-excel');
+      header('Content-Disposition: attachment;filename="Template Upload Barang.xlsx"');
+      header('Cache-Control: max-age=0');
+
+      $writer->save('php://output');
+  }
+
+  public function upload(){
+    
+    array_map('unlink', array_filter(
+            (array) array_merge(glob("./upload/*"))));
+  
+    $fileName = $_FILES['file']['name'];
+
+    $config['remove_spaces'] = FALSE;
+    $config['upload_path'] = './upload/'; //path upload
+    $config['file_name'] = $fileName;  // nama file
+    $config['allowed_types'] = 'xls|xlsx|csv'; //tipe file yang diperbolehkan
+    $config['max_size'] = 10000; // maksimal sizze
+
+
+    $this->load->library('upload'); //meload librari upload
+    $this->upload->overwrite = true;
+    $this->upload->initialize($config);
+      
+    if(! $this->upload->do_upload('file') ){
+        echo $this->upload->display_errors();exit();
+    }
+            
+    $inputFileName = './upload/'.$fileName;
+
+    
+    $reader = ReaderFactory::create(Type::XLSX); //set Type file xlsx
+    $reader->open($inputFileName); //open the file           
+
+    echo "<pre>";           
+    $i = 0; 
+
+    foreach ($reader->getSheetIterator() as $sheet) {             
+        foreach ($sheet->getRowIterator() as $rowData) {
+          if($i>0){
+            $data = array(
+                "kode_barang"=> $rowData[0],
+                "nama_barang"=> $rowData[1],
+                "warna"=> $rowData[2],
+                "berat"=> $rowData[3],
+                "harga"=> $rowData[4],
+            );
+
+            $exist = $this->admin->get_array('barang',array( 'kode_barang' => $rowData[0]));
+            if(empty($exist)){
+              $insert = $this->db->insert("barang",$data);
+              print_r($rowData);
+            }elseif ($rowData[0] == trim($rowData[0]) && strpos($rowData[0], ' ') !== false) {
+              print_r($rowData[0] . " tidak boleh mengadung spasi.<br>");
+            }else{
+              print_r($rowData[0] . " tidak boleh duplicate.<br>");
+            }
+            
+             
+          }
+          ++$i;
+        }
+    }
+
+    echo "<br> Total Rows : ".$i." <br>";               
+    $reader->close();
+                   
+
+    echo "Peak memory:", (memory_get_peak_usage(true) / 1024 / 1024), " MB" ,"<br>";
   }
 
 }
