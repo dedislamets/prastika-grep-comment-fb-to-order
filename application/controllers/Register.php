@@ -30,7 +30,6 @@ class Register extends CI_Controller {
     public function getKecamatan()
     {
         $arr = explode('. ', $this->input->get('kota',true)) ;
-          // print("<pre>".print_r($arr,true)."</pre>");exit();
 
         $data = $this->db->query("select distinct subdistrict_id,subdistrict_name from tb_kecamatan where city='" . $arr[1] ."' and type='" . $arr[0] ."'")->result();
         $this->output->set_content_type('application/json')->set_output(json_encode($data));
@@ -46,7 +45,14 @@ class Register extends CI_Controller {
         $response = [];
         $response['error'] = TRUE; 
         $response['msg']= "Gagal menyimpan.. Terjadi kesalahan pada sistem";
-        $recLogin = $this->session->userdata('user_id');
+        
+        $city_id = 0;
+        $arr = explode('. ', $this->input->post('kota',true)) ;
+        $cek_city_id = $this->admin->get_array('tb_kota',array( 'city' => $arr[1], 'type' => $arr[0]));
+        if(!empty($cek_city_id)){
+            $city_id = $cek_city_id['city_id'];
+        }
+
         $kode = "M-" . date("ymd-his");
         $data = array(
             'email'   => $this->input->post('email',true),
@@ -58,7 +64,8 @@ class Register extends CI_Controller {
             'kecamatan'   => $this->input->post('kecamatan',true),
             'kota'   => $this->input->post('kota',true),
             'provinsi'   => $this->input->post('provinsi',true),
-            'kode_member' => $kode
+            'kode_member' => $kode,
+            'city_id' => $city_id
         );
 
         $this->db->trans_begin();
@@ -125,7 +132,10 @@ KOTA : ". $this->input->post('kota',true) ."
     $barang = $this->admin->get_array('barang',array( 'kode_barang' => strtolower($arr_kode[0]) ));
     $member = $this->admin->get_array('members',array( 'id' => $arr_kode[1]));
     $exist = $this->admin->get_array('rekapan',array( 'kode_comment' => $this->input->get('kode',true), 'id_posting' => $this->input->get('id_posting',true)));
-    if(empty($exist)){
+    if(empty($exist) && !empty($barang) && !empty($member)){
+
+        $results_ongkir = $this->admin->cek_ongkir('54',$member['city_id'],$barang['berat']);
+        // print("<pre>".print_r($results_ongkir,true)."</pre>");exit();
 
         $data = array(
             'kode_order'  => $kode,
@@ -136,7 +146,10 @@ KOTA : ". $this->input->post('kota',true) ."
             'id_posting'    => $this->input->get('id_posting',true),
             'kode_comment'  => $this->input->get('kode',true),
             'kode_rand'     => $kode_rand,
-            'total'         => (((int)$arr_kode[1] * (float)$barang['harga']) + $kode_rand)
+            'total'         => (((int)$arr_kode[1] * (float)$barang['harga']) + $kode_rand),
+            'ongkir'        => $results_ongkir['costs'][0]['cost'][0]['value'],
+            'courier'       => $results_ongkir['name'],
+            'service'       => $results_ongkir['costs'][0]['service']
         );
         $result  = $this->db->insert('rekapan', $data);
         if(!$result){
@@ -165,3 +178,8 @@ _Tim Prastika Collection_";
     $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }
 }
+
+
+
+// ONGKIR : ". number_format($results_ongkir['costs'][0]['cost'][0]['value']) ."
+//EXPDS : ". $results_ongkir['name'] ."

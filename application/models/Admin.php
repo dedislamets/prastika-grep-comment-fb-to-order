@@ -320,4 +320,41 @@ class Admin extends CI_Model
         curl_close($curl);
         return $response;
     }
+
+    function cek_ongkir($asal_kota,$tujuan_kota, $berat){
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => 'https://pro.rajaongkir.com/api/cost',
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'POST',
+          CURLOPT_POSTFIELDS => array(
+                'key' => '6257ae210b00dfa4d6cda76747341c7a',
+                'origin' => $asal_kota,
+                'destination' => $tujuan_kota,
+                'weight' => floatval($berat)*100,
+                'courier' => 'ide',
+                'originType' => 'city',
+                'destinationType' => 'city'),
+        ));
+
+        $response = curl_exec($curl);
+        $response = json_decode($response, true);
+
+        curl_close($curl);
+
+        $results =  array();
+        if($response['rajaongkir']['status']['code'] === 400){
+            $results = [];
+        }else{
+            $results = $response['rajaongkir']['results'][0];
+        }
+
+        return $results;
+    }
 }

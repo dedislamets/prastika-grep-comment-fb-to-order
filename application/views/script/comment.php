@@ -106,9 +106,9 @@
             }else{
               if(that.status == 'Aktif'){
                 $.each(that.list_comment, function(_, obj) {
-                  if(obj.message.split(/\s/g).length === 1) {
-                    var arr = obj.message.split(".");
-                    $.get('<?= base_url() ?>register/rekap',{ kode : obj.message, pesan : obj.message, id_posting: that.id }, function(result){
+                  if(obj.message.trim().split(/\s/g).length === 1) {
+                    var arr = obj.message.trim().split(".");
+                    $.get('<?= base_url() ?>register/rekap',{ kode : obj.message.trim(), pesan : obj.message.trim(), id_posting: that.id }, function(result){
                         // alert(result);
                     })
                   }
@@ -147,9 +147,9 @@
             that.list_comment = merged;
             if(that.status == 'Aktif'){
               $.each(next_data.data.data, function(_, obj) {
-                if(obj.message.split(/\s/g).length === 1) {
-                  var arr = obj.message.split(".");
-                  $.get('<?= base_url() ?>register/rekap',{ kode : obj.message, pesan : obj.message, id_posting: that.id }, function(result){
+                if(obj.message.trim().split(/\s/g).length === 1) {
+                  var arr = obj.message.trim().split(".");
+                  $.get('<?= base_url() ?>register/rekap',{ kode : obj.message.trim(), pesan : obj.message.trim(), id_posting: that.id }, function(result){
                       // alert(result);
                   })
                 }
@@ -176,9 +176,9 @@
             }else{
               if(that.status == 'Aktif'){
                 $.each(that.list_comment, function(_, obj) {
-                  if(obj.message.split(/\s/g).length === 1) {
-                    var arr = obj.message.split(".");
-                    $.get('<?= base_url() ?>register/rekap',{ kode : obj.message, pesan : obj.message, id_posting: that.id }, function(result){
+                  if(obj.message.trim().split(/\s/g).length === 1) {
+                    var arr = obj.message.trim().split(".");
+                    $.get('<?= base_url() ?>register/rekap',{ kode : obj.message.trim(), pesan : obj.message.trim(), id_posting: that.id }, function(result){
                         // alert(result);
                     })
                   }
