@@ -112,7 +112,7 @@ KOTA : ". $this->input->post('kota',true) ."
     
     random:
     $kode_rand = rand(100,1000); 
-    $arr_kode = explode("/", $this->input->get('kode',true));
+    $arr_kode = explode(".", $this->input->get('kode',true));
 
     $cek_kode = $this->admin->get_array('rekapan',array( 'kode_rand' => $kode_rand, 'status' => 'Booking'));
     if(!empty($cek_kode)){
@@ -123,14 +123,14 @@ KOTA : ". $this->input->post('kota',true) ."
 
     $this->db->trans_begin();
     $barang = $this->admin->get_array('barang',array( 'kode_barang' => strtolower($arr_kode[0]) ));
-    $member = $this->admin->get_array('members',array( 'id' => $arr_kode[2]));
+    $member = $this->admin->get_array('members',array( 'id' => $arr_kode[1]));
     $exist = $this->admin->get_array('rekapan',array( 'kode_comment' => $this->input->get('kode',true), 'id_posting' => $this->input->get('id_posting',true)));
     if(empty($exist)){
 
         $data = array(
             'kode_order'  => $kode,
-            'id_member' => $arr_kode[2],
-            'qty'           => $arr_kode[1],
+            'id_member' => $arr_kode[1],
+            'qty'           => 1,
             'kode_product'  => strtolower($arr_kode[0]),
             'pesan'         => $this->input->get('pesan',true),
             'id_posting'    => $this->input->get('id_posting',true),
@@ -146,12 +146,12 @@ KOTA : ". $this->input->post('kota',true) ."
 
             $msg = "*Kode Rekap ". $kode ."*
 -----------------------------------
-ID MEMBER : ". $arr_kode[2] ."
+ID MEMBER : ". $arr_kode[1] ."
 NAMA: ". $member['nama_lengkap'] ."
 TANGGAL: ". date("Y-m-d H:i:s") ."
 
 BARANG : ". $barang['kode_barang'] ." ". $barang['nama_barang'] ."
-JUMLAH : ". $arr_kode[1] ."
+JUMLAH : 1
 HARGA : ". number_format($barang['harga']) ."
 
 ------------------------------------
