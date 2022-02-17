@@ -83,9 +83,6 @@ class Order extends CI_Controller {
           $credit = $value_mutasi->amount;
 
           $cek_kode = $this->admin->get_array('rekapan',array( 'total' => (float)$credit, 'status' => 'Booking'));
-          print("<pre>".print_r($cek_kode,true)."</pre>");
-          print("<pre>".print_r($this->db->last_query(),true)."</pre>");
-          exit();
 
           if(!empty($cek_kode)){
               
@@ -99,20 +96,20 @@ class Order extends CI_Controller {
             $this->db->where('kode_order', $cek_kode['kode_order']);
             $result  =  $this->db->update('rekapan');  
 
-            $member = $this->admin->get_array('members',array( 'id' => $cek_kode['id_member'] ));
-            $msg = "*Pembayaran Diterima*
-                    -----------------------------------
-                    NO INVOICE : ". $cek_kode['kode_order'] ."
-                    BANK: ". $response->module ."
-                    TANGGAL: ". $value_mutasi->system_date ."
-                    DESC : ". $value_mutasi->description ."
-                    TOTAL : ". number_format($credit) ."
+            // $member = $this->admin->get_array('members',array( 'id' => $cek_kode['id_member'] ));
+            // $msg = "*Pembayaran Diterima*
+            //         -----------------------------------
+            //         NO INVOICE : ". $cek_kode['kode_order'] ."
+            //         BANK: ". $response->module ."
+            //         TANGGAL: ". $value_mutasi->system_date ."
+            //         DESC : ". $value_mutasi->description ."
+            //         TOTAL : ". number_format($credit) ."
 
-                    ------------------------------------
-                    *Note : Pembayaran berhasil, pesanan anda akan segera kami proses.*
+            //         ------------------------------------
+            //         *Note : Pembayaran berhasil, pesanan anda akan segera kami proses.*
 
-                    _Tim Prastika Collection_";
-            $this->admin->kirim_wa($member['nomor_wa'], $msg);
+            //         _Tim Prastika Collection_";
+            // $this->admin->kirim_wa($member['nomor_wa'], $msg);
 
           }
         }
