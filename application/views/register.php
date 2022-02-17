@@ -113,12 +113,12 @@
                         <!-- <i class="nc-icon nc-key-25"></i> -->
                       </span>
                     </div>
-                    <select name="provinsi" id="provinsi" class="form-control">
+                    <select name="provinsi" id="provinsi" class="form-control" required>
                       <option value="">Pilih Provinsi</option>
                       <?php 
                       foreach($provinsi as $row)
                       { 
-                        echo '<option value="'.$row->province.'">'.$row->province.'</option>';
+                        echo '<option value="'.$row->provinsi.'">'.$row->provinsi.'</option>';
                       }
                       ?>
                     </select>
@@ -131,7 +131,7 @@
                         <!-- <i class="nc-icon nc-key-25"></i> -->
                       </span>
                     </div>
-                    <select name="kota" id="kota" class="form-control">
+                    <select name="kota" id="kota" class="form-control" required>
                       <option value="">Pilih Kota</option>
                       <?php 
                       foreach($kota as $row)
@@ -149,7 +149,7 @@
                       </span>
                     </div>
                     <!-- <input type="text" name="kecamatan" class="form-control" placeholder="Kecamatan" required /> -->
-                    <select name="kecamatan" id="kecamatan" class="form-control">
+                    <select name="kecamatan" id="kecamatan" class="form-control" required                           >
                       <option value="">Pilih Kecamatan</option>
                       <?php 
                         foreach($kecamatan as $row)
@@ -167,7 +167,7 @@
                         <!-- <i class="nc-icon nc-key-25"></i> -->
                       </span>
                     </div>
-                    <select name="kelurahan" id="kelurahan" class="form-control">
+                    <select name="kelurahan" id="kelurahan" class="form-control" required>
                       <option value="">Pilih Kelurahan</option>
                       <?php 
                       foreach($kelurahan as $row)
@@ -184,10 +184,10 @@
                   
                   <div style="border: solid 1px grey;border-radius: 10px;padding: 10px;background-color: #ececec ">
                     LANJUT ORDER DI LIVE, KETIK : <br><br>
-                    #KODE_BARANG/JUMLAH_ORDER/ID_MEMBER# <br><br>
-                    CONTOH : #001S/1/19#<br><br>
+                    KODE_BARANG.ID_MEMBER <br><br>
+                    CONTOH : 001S.19<br><br>
 
-                    NOTE : WAJIB MENGGUNAKAN AWALAN DAN AKHIRAN #
+                    NOTE : WAJIB MENGGUNAKAN TITIK TANPA ADA SPASI
                   </div>
                   <br />
                   
@@ -283,18 +283,27 @@
 
           $('#' + name).empty();
             $.each(data,function(i,value){
-                  $('#' + name).append('<option value="'+value.kota+'">'+value.kota+'</option>');
+                  $('#' + name).append('<option value="'+ value.type + '. ' + value.city_name +'">'+ value.type + ' ' + value.city_name +'</option>');
               })
           });
+
+          $('#kecamatan').empty();
+          $('#kecamatan').append('<option value="">Pilih Kecamatan</option>');
+
+          $('#kelurahan').empty();
+          $('#kelurahan').append('<option value="">Pilih Kelurahan</option>');
       }
       function getKecamatan(val,name){
         $.get('<?= base_url()?>register/getKecamatan', { kota: val  }, function(data){ 
 
           $('#' + name).empty();
             $.each(data,function(i,value){
-                  $('#' + name).append('<option value="'+value.kecamatan+'">'+value.kecamatan+'</option>');
+                  $('#' + name).append('<option value="'+value.subdistrict_name+'">'+value.subdistrict_name+'</option>');
               })
           });
+
+          $('#kelurahan').empty();
+          $('#kelurahan').append('<option value="">Pilih Kelurahan</option>');
       }
       function getKelurahan(val,name){
         $.get('<?= base_url()?>register/getKelurahan', { kec: val  }, function(data){ 

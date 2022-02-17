@@ -13,7 +13,7 @@ class Register extends CI_Controller {
 			$data['title'] = 'Register';
 			// $data['main'] = 'dashboard/register';
 			$data['js'] = 'script/register';
-            $data['provinsi'] = $this->db->query("select distinct province from master_city")->result();
+            $data['provinsi'] = $this->db->query("select * from tb_provinsi")->result();
             // $data['kota'] = $this->db->query('select distinct kota from master_city')->result();
             // $data['kecamatan'] = $this->db->query("select distinct kecamatan from master_city")->result();
             // $data['kelurahan'] = $this->db->query("select distinct kelurahan from master_city")->result();
@@ -23,13 +23,16 @@ class Register extends CI_Controller {
 
     public function getKota()
     {
-        $data = $this->db->query("select distinct kota from master_city where province='" . $this->input->get('prov',true) ."'")->result();
+        $data = $this->db->query("select distinct city_id,city_name,type from tb_kota where province='" . $this->input->get('prov',true) ."'")->result();
         $this->output->set_content_type('application/json')->set_output(json_encode($data));
     }
 
     public function getKecamatan()
     {
-        $data = $this->db->query("select distinct kecamatan from master_city where kota='" . $this->input->get('kota',true) ."'")->result();
+        $arr = explode('. ', $this->input->get('kota',true)) ;
+          // print("<pre>".print_r($arr,true)."</pre>");exit();
+
+        $data = $this->db->query("select distinct subdistrict_id,subdistrict_name from tb_kecamatan where city='" . $arr[1] ."' and type='" . $arr[0] ."'")->result();
         $this->output->set_content_type('application/json')->set_output(json_encode($data));
     }
     public function getKelurahan()
