@@ -87,9 +87,10 @@ class Order extends CI_Controller {
           if(!empty($cek_kode)){
               
             $data = array(
-                'metode_bayar'  => 'bca',
+                'metode_bayar'  => $response->module,
                 'payment_date' => $value_mutasi->system_date,
                 'status'         => 'Payment',
+                'id_mutasi'   => $value_mutasi->id
             );
 
             $this->db->set($data);
