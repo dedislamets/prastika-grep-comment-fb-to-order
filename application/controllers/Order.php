@@ -1,5 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
+ini_set('max_execution_time', 0); 
+ini_set('memory_limit','2048M');
+
 class Order extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
@@ -8,84 +12,107 @@ class Order extends CI_Controller {
 	}
 
 	public function callback(){
-		$data = $this->mutasi->callback();
-		if(isset($data['status']) && $data['status']==true){
+		// $data = $this->mutasi->callback();
+		// if(isset($data['status']) && $data['status']==true){
 			//do something with this data
-			file_put_contents('log-mutasi.txt',json_encode($data)."\n", FILE_APPEND);
-			$response = $data;
+			// file_put_contents('log-mutasi.txt',json_encode($data)."\n", FILE_APPEND);
+
+			$response = json_decode(file_get_contents('php://input'));
 
 			/*foreach($response['data'] as $key => $value) {
-		        $data = array(
-			        'id_provinsi'  => $value->province_id,
-			        'provinsi' 	=> $value->province,
-			    );
+          $curl = curl_init();
 
-			    $result  = $this->db->insert('tb_provinsi', $data);
-		    }*/
-      // print("<pre>".print_r($response['data'],true)."</pre>");
-      $list_bank= $response['data'];
+          curl_setopt_array($curl, array(
+              CURLOPT_URL => 'https://pro.rajaongkir.com/api/subdistrict?key=6257ae210b00dfa4d6cda76747341c7a&city=' . $value->city_id,
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => '',
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => true,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => 'GET',
+          ));
 
-      foreach($list_bank as $key_bank => $value_bank) {
-        $data_mutasi= $value_bank->data_mutasi;
+          $response = curl_exec($curl);
+          $response = json_decode($response, true);
 
-        foreach($data_mutasi as $key_mutasi => $value_mutasi) {
-          $cek_mutasi = $this->admin->get_array('mutasi',array( 'id' => $value_mutasi->id));
-          if(empty($cek_mutasi)){
-
-            //Insert Log Mutasi
+          curl_close($curl);
+          foreach($response['rajaongkir']['results'] as $k => $val) {
+          // print("<pre>".print_r($val,true)."</pre>");exit();
             $data = array(
-                'id'                => $value_mutasi->id,
-                'system_date'       => $value_mutasi->system_date,
-                'transaction_date'  => $value_mutasi->transaction_date,
-                'description'       => $value_mutasi->description,
-                'type'              => $value_mutasi->type,
-                'amount'            => $value_mutasi->amount,
-                'balance'           => $value_mutasi->balance,
-                'module'            => $value_bank->module,
-                'saldo_update'      => $value_bank->balance,
-                'account_id'        => $value_bank->account_id,
-                'account_name'      => $value_bank->account_name,
-                'account_number'    => $value_bank->account_number,
+              'subdistrict_id'  => $val['subdistrict_id'],
+              'province_id'   => $val['province_id'],
+              'province'   => $val['province'],
+              'city_id'   => $val['city_id'],
+              'city'   => $val['city'],
+              'type'   => $val['type'],
+              'subdistrict_name'   => $val['subdistrict_name'],
             );
-            $result  = $this->db->insert('mutasi', $data);
 
-            //Update Status Rekapan
-            $credit = $value_mutasi->amount;
+			      $result  = $this->db->insert('tb_kecamatan', $data);
+          }
+		  }
+      exit; */
 
-            $cek_kode = $this->admin->get_array('rekapan',array( 'total' => $credit, 'status' => 'Booking'));
-            if(!empty($cek_kode)){
-                
-              $data = array(
-                  'metode_bayar'  => $response['data'][0]->bank_name,
-                  'payment_date' => $response['data'][0]->created,
-                  'status'         => 'Payment',
-              );
+      $data_mutasi= $response->data->data_mutasi;
 
-              $this->db->set($data);
-              $this->db->where('kode_order', $cek_kode['kode_order']);
-              $result  =  $this->db->update('rekapan');  
+      foreach($data_mutasi as $key_mutasi => $value_mutasi) {
+        $cek_mutasi = $this->admin->get_array('mutasi',array( 'id' => $value_mutasi->id));
+        if(empty($cek_mutasi)){
+          // print("<pre>".print_r($value_bank,true)."</pre>");exit();
 
-              $member = $this->admin->get_array('members',array( 'id' => $cek_kode['id_member'] ));
-              $msg = "*Pembayaran Diterima*
-                      -----------------------------------
-                      NO INVOICE : ". $cek_kode['kode_order'] ."
-                      BANK: ". $response['data'][0]->bank_name ."
-                      TANGGAL: ". $response['data'][0]->created ."
-                      REKENING : ". $response['data'][0]->account_number ."
-                      TOTAL : ". number_format($credit) ."
+          //Insert Log Mutasi
+          $data = array(
+              'id'                => $value_mutasi->id,
+              'system_date'       => $value_mutasi->system_date,
+              'transaction_date'  => $value_mutasi->transaction_date,
+              'description'       => $value_mutasi->description,
+              'type'              => $value_mutasi->type,
+              'amount'            => $value_mutasi->amount,
+              'balance'           => $value_mutasi->balance,
+              'module'            => $response->data->module,
+              'saldo_update'      => $response->data->balance,
+              'account_id'        => $response->data->account_id,
+              'account_name'      => $response->data->account_name,
+              'account_number'    => $response->data->account_number,
+          );
+          $result  = $this->db->insert('mutasi', $data);
 
-                      ------------------------------------
-                      *Note : Pembayaran berhasil, pesanan anda akan segera kami proses.*
+          //Update Status Rekapan
+          $credit = $value_mutasi->amount;
 
-                      _Tim Prastika Collection_";
-              $this->admin->kirim_wa($member['nomor_wa'], $msg);
+          $cek_kode = $this->admin->get_array('rekapan',array( 'total' => $credit, 'status' => 'Booking'));
+          if(!empty($cek_kode)){
+              
+            $data = array(
+                'metode_bayar'  => $response['data'][0]->bank_name,
+                'payment_date' => $response['data'][0]->created,
+                'status'         => 'Payment',
+            );
 
-            }
+            $this->db->set($data);
+            $this->db->where('kode_order', $cek_kode['kode_order']);
+            $result  =  $this->db->update('rekapan');  
+
+            $member = $this->admin->get_array('members',array( 'id' => $cek_kode['id_member'] ));
+            $msg = "*Pembayaran Diterima*
+                    -----------------------------------
+                    NO INVOICE : ". $cek_kode['kode_order'] ."
+                    BANK: ". $response['data'][0]->bank_name ."
+                    TANGGAL: ". $response['data'][0]->created ."
+                    REKENING : ". $response['data'][0]->account_number ."
+                    TOTAL : ". number_format($credit) ."
+
+                    ------------------------------------
+                    *Note : Pembayaran berhasil, pesanan anda akan segera kami proses.*
+
+                    _Tim Prastika Collection_";
+            $this->admin->kirim_wa($member['nomor_wa'], $msg);
+
           }
         }
       }
-      exit();
-		}
+  
 	}
 
 	public function get_user_info(){
