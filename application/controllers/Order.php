@@ -88,7 +88,7 @@ class Order extends CI_Controller {
               
             $data = array(
                 'metode_bayar'  => 'bca',
-                // 'payment_date' => $value_mutasi->system_date,
+                'payment_date' => $value_mutasi->system_date,
                 'status'         => 'Payment',
             );
 
