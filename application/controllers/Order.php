@@ -83,12 +83,12 @@ class Order extends CI_Controller {
           //Update Status Rekapan
           $credit = $value_mutasi->amount;
 
-          $cek_kode = $this->admin->get_array('rekapan',array( 'total' => $credit, 'status' => 'Booking'));
+          $cek_kode = $this->admin->get_array('rekapan',array( 'total' => (float)$credit, 'status' => 'Booking'));
           if(!empty($cek_kode)){
               
             $data = array(
-                'metode_bayar'  => $response['data'][0]->bank_name,
-                'payment_date' => $response['data'][0]->created,
+                'metode_bayar'  => $response->module,
+                'payment_date' => $value_mutasi->system_date,
                 'status'         => 'Payment',
             );
 
@@ -100,9 +100,9 @@ class Order extends CI_Controller {
             $msg = "*Pembayaran Diterima*
                     -----------------------------------
                     NO INVOICE : ". $cek_kode['kode_order'] ."
-                    BANK: ". $response['data'][0]->bank_name ."
-                    TANGGAL: ". $response['data'][0]->created ."
-                    REKENING : ". $response['data'][0]->account_number ."
+                    BANK: ". $response->module ."
+                    TANGGAL: ". $value_mutasi->system_date ."
+                    DESC : ". $value_mutasi->description ."
                     TOTAL : ". number_format($credit) ."
 
                     ------------------------------------
