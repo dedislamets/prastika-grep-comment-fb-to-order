@@ -53,7 +53,6 @@ class Order extends CI_Controller {
           }
 		  }
       exit; */
-      // print("<pre>".print_r($response->data_mutasi,true)."</pre>");exit();
 
 
       $data_mutasi= $response->data_mutasi;
@@ -84,6 +83,10 @@ class Order extends CI_Controller {
           $credit = $value_mutasi->amount;
 
           $cek_kode = $this->admin->get_array('rekapan',array( 'total' => (float)$credit, 'status' => 'Booking'));
+          print("<pre>".print_r($cek_kode,true)."</pre>");
+          print("<pre>".print_r($this->db->last_query(),true)."</pre>");
+          exit();
+
           if(!empty($cek_kode)){
               
             $data = array(
