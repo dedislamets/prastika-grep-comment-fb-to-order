@@ -53,8 +53,10 @@ class Order extends CI_Controller {
           }
 		  }
       exit; */
+      // print("<pre>".print_r($response->data_mutasi,true)."</pre>");exit();
 
-      $data_mutasi= $response->data->data_mutasi;
+
+      $data_mutasi= $response->data_mutasi;
 
       foreach($data_mutasi as $key_mutasi => $value_mutasi) {
         $cek_mutasi = $this->admin->get_array('mutasi',array( 'id' => $value_mutasi->id));
@@ -70,11 +72,11 @@ class Order extends CI_Controller {
               'type'              => $value_mutasi->type,
               'amount'            => $value_mutasi->amount,
               'balance'           => $value_mutasi->balance,
-              'module'            => $response->data->module,
-              'saldo_update'      => $response->data->balance,
-              'account_id'        => $response->data->account_id,
-              'account_name'      => $response->data->account_name,
-              'account_number'    => $response->data->account_number,
+              'module'            => $response->module,
+              'saldo_update'      => $response->balance,
+              'account_id'        => $response->account_id,
+              'account_name'      => $response->account_name,
+              'account_number'    => $response->account_number,
           );
           $result  = $this->db->insert('mutasi', $data);
 
