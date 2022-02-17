@@ -15,7 +15,7 @@ class Order extends CI_Controller {
 		// $data = $this->mutasi->callback();
 		// if(isset($data['status']) && $data['status']==true){
 			//do something with this data
-			// file_put_contents('log-mutasi.txt',json_encode($data)."\n", FILE_APPEND);
+			file_put_contents('log-mutasi.txt',file_get_contents('php://input')."\n", FILE_APPEND);
 
 			$response = json_decode(file_get_contents('php://input'));
 
