@@ -46,11 +46,11 @@ class Register extends CI_Controller {
         $response['error'] = TRUE; 
         $response['msg']= "Gagal menyimpan.. Terjadi kesalahan pada sistem";
         
-        $city_id = 0;
-        $arr = explode('. ', $this->input->post('kota',true)) ;
-        $cek_city_id = $this->admin->get_array('tb_kota',array( 'city' => $arr[1], 'type' => $arr[0]));
-        if(!empty($cek_city_id)){
-            $city_id = $cek_city_id['city_id'];
+        $kec_id = 0;
+       
+        $cek_kec_id = $this->admin->get_array('tb_kecamatan',array( 'subdistrict_name' => $this->input->post('kecamatan',true)));
+        if(!empty($cek_kec_id)){
+            $kec_id = $cek_kec_id['subdistrict_id'];
         }
 
         $kode = "M-" . date("ymd-his");
@@ -65,7 +65,7 @@ class Register extends CI_Controller {
             'kota'   => $this->input->post('kota',true),
             'provinsi'   => $this->input->post('provinsi',true),
             'kode_member' => $kode,
-            'city_id' => $city_id
+            'kec_id' => $kec_id
         );
 
         $this->db->trans_begin();
@@ -134,7 +134,7 @@ KOTA : ". $this->input->post('kota',true) ."
     $exist = $this->admin->get_array('rekapan',array( 'kode_comment' => $this->input->get('kode',true), 'id_posting' => $this->input->get('id_posting',true)));
     if(empty($exist) && !empty($barang) && !empty($member)){
 
-        $results_ongkir = $this->admin->cek_ongkir('54',$member['city_id'],$barang['berat']);
+        $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],$barang['berat']);
         // print("<pre>".print_r($results_ongkir,true)."</pre>");exit();
 
         $data = array(
@@ -146,7 +146,7 @@ KOTA : ". $this->input->post('kota',true) ."
             'id_posting'    => $this->input->get('id_posting',true),
             'kode_comment'  => $this->input->get('kode',true),
             'kode_rand'     => $kode_rand,
-            'total'         => (((int)$arr_kode[1] * (float)$barang['harga']) + $kode_rand),
+            'total'         => ((1 * (float)$barang['harga']) + $kode_rand),
             'ongkir'        => $results_ongkir['costs'][0]['cost'][0]['value'],
             'courier'       => $results_ongkir['name'],
             'service'       => $results_ongkir['costs'][0]['service']

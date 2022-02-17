@@ -339,8 +339,8 @@ class Admin extends CI_Model
                 'destination' => $tujuan_kota,
                 'weight' => floatval($berat)*100,
                 'courier' => 'ide',
-                'originType' => 'city',
-                'destinationType' => 'city'),
+                'originType' => 'subdistrict',
+                'destinationType' => 'subdistrict'),
         ));
 
         $response = curl_exec($curl);
