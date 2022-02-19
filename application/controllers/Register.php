@@ -123,6 +123,7 @@ KOTA : ". $this->input->post('kota',true) ."
     }    
 
     $format_order = $postingan['format_order']; 
+    $arr_kode = explode(".", $this->input->get('kode',true));
 
     if(empty($format_order)) goto finish;
     $arr_format = explode(".", $format_order);
