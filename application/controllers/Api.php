@@ -566,7 +566,7 @@ class Api extends RestController  {
         $this->response($response);
     }
 
-    public function wa_post()
+    public function wa_get()
     {
         // print("<pre>".print_r($this->post(),true)."</pre>");exit();
         $response= [];
