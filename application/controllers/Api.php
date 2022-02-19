@@ -570,18 +570,20 @@ class Api extends RestController  {
     {
         // print("<pre>".print_r($this->post(),true)."</pre>");exit();
         $response= [];
-        if(empty($this->post('pesan', true))){
-            $response['error']=true;
-            $response['msg'][]= "Tidak ada pesan dikirim";
-        }
-        if(empty($this->post('hp', true))){
-            $response['error']=true;
-            $response['msg'][]= "Tidak ada nomor hp dikirim";
-        }
+        $response['false']=true;
+        // if(empty($this->post('pesan', true))){
+        //     $response['error']=true;
+        //     $response['msg'][]= "Tidak ada pesan dikirim";
+        // }
+        // if(empty($this->post('hp', true))){
+        //     $response['error']=true;
+        //     $response['msg'][]= "Tidak ada nomor hp dikirim";
+        // }
         $job = $this->admin->api_array('job_pesan',array('sent' => 0), 'created ASC');
 
         foreach ($job as $key => $value) {
             $sent = $this->admin->kirim_wa($value['no_hp'],$value['pesan']);
+            $response['sent'][]= $value['no_hp'] . " - " $value['pesan'];
             $data['sent'] = 1;
             $this->db->set($data);
             $this->db->where('id', $value['id']);
