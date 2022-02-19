@@ -583,7 +583,7 @@ class Api extends RestController  {
 
         foreach ($job as $key => $value) {
             $sent = $this->admin->kirim_wa($value['no_hp'],$value['pesan']);
-            $response['sent'][]= $value['no_hp'] . " - " $value['pesan'];
+            $response['sent'][]= $value['no_hp'] . " - ". $value['pesan'];
             $data['sent'] = 1;
             $this->db->set($data);
             $this->db->where('id', $value['id']);
