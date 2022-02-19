@@ -77,6 +77,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="<?= base_url() ?>pesan" class="nav-link">
+            <i class="icon ion-ios-email"></i>
+            <span>WA Pending</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="<?= base_url() ?>setup" class="nav-link">
             <i class="icon ion-ios-gear-outline"></i>
             <span>Setting</span>

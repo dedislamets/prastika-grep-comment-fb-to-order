@@ -172,7 +172,7 @@ KOTA : ". $this->input->post('kota',true) ."
         }else{
             $response['error']= FALSE;
 
-            $msg = "*Kode Rekap ". $kode ."*
+            $msg = "*Kode Deal ". $kode ."*
 -----------------------------------
 ID MEMBER : ". $idmember ."
 NAMA: ". $member['nama_lengkap'] ."
