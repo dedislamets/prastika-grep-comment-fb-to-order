@@ -438,94 +438,6 @@ class Api extends RestController  {
         }
     }
 
-    public function linen_rusak_get()
-    {
-        $linen_bersih = $this->admin->api_array('linen_rusak','DATEDIFF(CURRENT_INSERT,CURDATE()) > -4');
-        $linen_bersih_detail = $this->admin->api_array('linen_rusak_detail','DATEDIFF(CURRENT_INSERT,CURDATE()) > -4');
-
-        foreach ($linen_bersih_detail as $key => $value) {
-            $this->db->from('barang');
-            $this->db->join('jenis_barang','barang.id_jenis=jenis_barang.id');
-            $this->db->where(array( 'serial' => $value['epc']));
-            $data_exist = $this->db->get()->row();
-            if(!empty($data_exist)){
-                $linen_bersih_detail[$key]['item'] = $data_exist->jenis;
-                $linen_bersih_detail[$key]['berat'] = $data_exist->berat;
-            }
-        }
-
-        if ($linen_bersih != FALSE) {
-            $this->response([
-                'status' => true,
-                'data' => $linen_bersih,
-                'data_detail' => $linen_bersih_detail
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => false,
-                'message' => 'No users were found'
-            ], 404 );
-        }
-    }
-
-    public function request_linen_get()
-    {
-        $linen_request = $this->admin->api_array('request_linen','DATEDIFF(created_date,CURDATE()) > -7');
-        $linen_request_detail = $this->admin->api_array('request_linen_detail','DATEDIFF(CURRENT_INSERT,CURDATE()) > -7');
-
-        if ($linen_request != FALSE) {
-            $this->response([
-                'status' => true,
-                'data' => $linen_request,
-                'data_detail' => $linen_request_detail
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => false,
-                'message' => 'No users were found'
-            ], 404 );
-        }
-    }
-
-
-    public function hapus_room_get()
-    {
-        // echo $this->get('id');exit();
-        $del = $this->admin->deleteTable('id', $this->get('id') ,'tb_ruangan');
-
-        if ($del) {
-            $this->response([
-                'status' => 200,
-                'message' => "Berhasil dihapus"
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => 502,
-                'message' => 'Gagal menghapus data'
-            ], 404 );
-        }
-    }
-    public function hapus_token_post()
-    {
-        $del = $this->admin->deleteTable('id_user', $this->post('id_user') ,'tb_token_push');
-
-        if ($del) {
-            $this->response([
-                'status' => 200,
-                'message' => "Berhasil dihapus"
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => 502,
-                'message' => 'Gagal menghapus data'
-            ], 404 );
-        }
-    }
-
     public function hapus_linen_get()
     {
         // echo $this->get('id');exit();
@@ -543,27 +455,6 @@ class Api extends RestController  {
                 'message' => 'Gagal menghapus data'
             ], 404 );
         }
-    }
-
-    public function room_post()
-    {
-        // print("<pre>".print_r($this->post(),true)."</pre>");exit();
-        $data =array(
-            "ruangan"=>$this->post('ruangan'),
-            
-        );
-        $insert = $this->db->insert("tb_ruangan", $data);
-        if($insert){
-            $response['status']=200;
-            $response['error']=false;
-            $response['message']='Data berhasil ditambahkan.';
-        }else{
-            // $response['status']=502;
-            $response['error']=true;
-            $response['message']='Data gagal ditambahkan.';
-
-        }
-        $this->response($response);
     }
 
     public function wa_get()

@@ -106,7 +106,7 @@ NOMOR : ". $this->input->post('nomor_wa',true) ."
 KOTA : ". $this->input->post('kota',true) ."
 
 *Note : **Harap simpan kode member ini untuk bertransaksi di facebook setiap saat. Anda bisa kembali ke Facebook untuk bertransaksi.*";
-        //$this->admin->kirim_wa($this->input->post('nomor_wa',true), $msg);
+        $this->admin->simpan_wa($this->input->post('nomor_wa',true), $msg);
 
         redirect('Register');
     }
@@ -185,7 +185,7 @@ HARGA : ". number_format($barang['harga']) ."
 *Note : Harga diatas belum termasuk Ongkir.*
 
 _Tim Prastika Collection_";
-    $this->admin->kirim_wa($member['nomor_wa'], $msg);
+    $this->admin->simpan_wa($member['nomor_wa'], $msg);
       }
     }
     $this->db->trans_complete();        

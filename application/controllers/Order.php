@@ -82,20 +82,20 @@ class Order extends CI_Controller {
           //Update Status Rekapan
           $credit = $value_mutasi->amount;
 
-          $cek_kode = $this->admin->get_array('rekapan',array( 'total' => (float)$credit, 'status' => 'Booking'));
+          $cek_kode = $this->admin->get_array('invoice',array( 'total' => (float)$credit, 'status' => 'Billing'));
 
           if(!empty($cek_kode)){
               
             $data = array(
-                'metode_bayar'  => $response->module,
-                'payment_date' => $value_mutasi->system_date,
+                // 'metode_bayar'  => $response->module,
+                // 'payment_date' => $value_mutasi->system_date,
                 'status'         => 'Payment',
                 'id_mutasi'   => $value_mutasi->id
             );
 
             $this->db->set($data);
-            $this->db->where('kode_order', $cek_kode['kode_order']);
-            $result  =  $this->db->update('rekapan');  
+            $this->db->where('kode_inv', $cek_kode['kode_inv']);
+            $result  =  $this->db->update('invoice');  
 
             $member = $this->admin->get_array('members',array( 'id' => $cek_kode['id_member'] ));
             $msg = "*Pembayaran Diterima*
@@ -110,7 +110,7 @@ class Order extends CI_Controller {
                     *Note : Pembayaran berhasil, pesanan anda akan segera kami proses.*
 
                     _Tim Prastika Collection_";
-            $this->admin->kirim_wa($member['nomor_wa'], $msg);
+            $this->admin->simpan_wa($member['nomor_wa'], $msg);
 
           }
         }
@@ -267,7 +267,7 @@ class Order extends CI_Controller {
         Jika pembayaran kamu masih belum terproses, silahkan hubungi kami.*
 
         _Tim Prastika Collection_";
-        $this->admin->kirim_wa($member['nomor_wa'], $msg);
+        $this->admin->simpan_wa($member['nomor_wa'], $msg);
     }
 
     $this->db->trans_complete();   

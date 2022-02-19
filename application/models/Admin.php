@@ -189,49 +189,7 @@ class Admin extends CI_Model
         }
     }
 
-    function getLastHistory($epc){
-        $sql = "SELECT * FROM (
-                    SELECT B.no_transaksi,B.current_insert,epc,'kotor' AS FLAG, A.STATUS , '-' AS RUANGAN
-                        FROM linen_kotor_detail B, linen_kotor A  
-                        WHERE A.NO_TRANSAKSI=B.no_transaksi AND epc='".$epc."'
-                    UNION ALL
-                    SELECT B.no_transaksi,B.current_insert,epc,'bersih' AS FLAG , A.STATUS ,'-' AS RUANGAN
-                        FROM linen_bersih_detail B, linen_bersih A
-                        WHERE A.NO_TRANSAKSI=B.no_transaksi AND epc='".$epc."'
-                    UNION ALL
-                    SELECT B.no_transaksi,B.current_insert,epc,'keluar' AS FLAG , A.STATUS , A.RUANGAN
-                        FROM linen_keluar_detail B, linen_keluar A
-                        WHERE A.NO_TRANSAKSI=B.no_transaksi AND epc='".$epc."'
-                    UNION ALL 
-                    SELECT B.no_transaksi,B.current_insert,epc,'rusak' AS FLAG ,'RUSAK' AS STATUS,'-' AS RUANGAN
-                        FROM linen_rusak_detail B, linen_rusak A
-                        WHERE A.NO_TRANSAKSI=B.no_transaksi AND epc='".$epc."'
-                )history 
-                ORDER BY current_insert DESC LIMIT 1";
-
-        return $this->db->query($sql)->row_array();
-    }
-
-    function getJumlahCuci($epc) {
-        $sql =  "SELECT COUNT(*) jml FROM linen_kotor a JOIN linen_kotor_detail b ON a.no_transaksi=b.no_transaksi WHERE epc='". $epc ."'";
-        return $this->db->query($sql)->row_array()['jml'];
-    }
-    function getTotalBeratTransaksi($no_transaksi) {
-        $sql =  "SELECT TOTAL_BERAT FROM linen_kotor WHERE no_transaksi='". $no_transaksi ."'";
-        return $this->db->query($sql)->row_array()['TOTAL_BERAT'];
-    }
-
-    function getBerat($epc){
-        $berat = 0;
-        $this->db->from('barang');
-        $this->db->join('jenis_barang','barang.id_jenis=jenis_barang.id');
-        $this->db->where(array( 'serial' => $epc));
-        $data = $this->db->get()->row();
-        if(!empty($data)){
-            $berat = $data->berat;
-        }
-        return $berat;
-    }
+    
     function send_notif_app_get($type = 'single', $token = '', $message = '' ,$topics = ''){
         error_reporting(-1);
         ini_set('display_errors', 'On');
@@ -290,12 +248,21 @@ class Admin extends CI_Model
  
         curl_close($ch);
     }
+    function simpan_wa($hp, $msg){
+        $data = array(
+            'no_hp'      => $hp,
+            'pesan'   => $msg 
+        );
+        $this->db->insert('job_pesan', $data);
+    }
     function kirim_wa($hp,$msg){
         $fields = array(
             //hp dedi
-            'token' => 'ZaT2RwUa1UxucRF9tp99VaDrGm1Je8bw1iDsJXfDeBYY1GnXTY',
+            //'token' => 'ZaT2RwUa1UxucRF9tp99VaDrGm1Je8bw1iDsJXfDeBYY1GnXTY',
             //ini hp prastika 'token' => 'SmHVxhJd6iSnBsMj9Cc2qsvXirPTNjeuFadfzz8mmw7jiESfvC', 
             //'token' => 'Fg97TQRRZ1cUk7vZhHHyEf2FsQgnmNoLRjaRpquDtyAHFu21km',
+            //hp redmi 8
+            'token' => '5pCW3hv3WG1uWfRVQn4oqnNX84uURykBK1gzAZ4zvX8cjttm5e',
             'number' => $hp,
             'message' => $msg,
             'date' => date("Y-m-d"),
