@@ -95,7 +95,7 @@ class Pesan extends CI_Controller {
       }
       $this->db->limit($length,$start);
       $this->db->from("job_pesan");
-      // $this->db->join('tb_group_role', 'tb_group_role.id = tb_user.id_role','left');
+      $this->db->where("sent",0);
       $pengguna = $this->db->get();
       $data = array();
       foreach($pengguna->result() as $r)
@@ -140,7 +140,7 @@ class Pesan extends CI_Controller {
           }                 
       }
       $this->db->from("job_pesan");
-      // $this->db->join('tb_group_role', 'tb_group_role.id = tb_user.id_role','left');
+      $this->db->where("sent",0);
       $query = $this->db->get();
     	$result = $query->row();
     	if(isset($result)) return $result->num;

@@ -26,9 +26,9 @@
                 <thead>
                   <tr>
                     <th class="wd-15p">ID</th>
-                    <th class="wd-20p">No WA</th>
-                    <th class="wd-15p">Pesan</th>
-                    <th class="wd-15p">Dibuat</th>
+                    <th>No WA</th>
+                    <th>Pesan</th>
+                    <th>Dibuat</th>
 
                   </tr>
                 </thead>
