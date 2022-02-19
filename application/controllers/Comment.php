@@ -44,15 +44,15 @@ class Comment extends CI_Controller {
 
 				$exist = $this->admin->get_array('postingan',array( 'id_posting' => $this->input->get('id', true)));
 			    if(empty($exist)){
-			    	$data = array(
+			    	$dataku = array(
 				        'id_posting'  => $response['id'],
-				        'content' => $response['title'],
+				        'content' => '',
 				        'full_picture' => $response['embed_html'],
-				        'format_order'  => '',
+				        'format_order'  => 'KODE.QTY.IDMEMBER',
 				        'status'		=> 'Aktif'
 				        
 				    );
-			      	$result  = $this->db->insert('postingan', $data);
+			      	$result  = $this->db->insert('postingan', $dataku);
 			      	
 			    }
 				

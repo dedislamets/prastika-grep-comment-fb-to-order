@@ -149,6 +149,10 @@
             <label>Format Order</label>
             <input type="text" id="format_order" name="format_order" class="form-control" v-model:value="format_order"  />
           </div>  --> 
+          <select name="format_order" id="format_order" class="form-control" v-model:value="format_order">
+              <option value="KODE.QTY.IDMEMBER">KODE.QTY.IDMEMBER</option>
+              <option value="KODE.IDMEMBER">KODE.IDMEMBER</option>
+          </select>
           <div class="form-group">
             <label>Aktif</label><br>
             <input type="checkbox" id="status" name="status" v-model="selected"/>

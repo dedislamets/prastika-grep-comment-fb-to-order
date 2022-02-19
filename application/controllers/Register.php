@@ -117,36 +117,50 @@ KOTA : ". $this->input->post('kota',true) ."
     $response['error'] = TRUE; 
     $response['msg']= "Gagal menyimpan.. Terjadi kesalahan pada sistem";
     
-    random:
-    $kode_rand = rand(100,1000); 
-    $arr_kode = explode(".", $this->input->get('kode',true));
+    $postingan = $this->admin->get_array('postingan',array( 'id_posting' => $this->input->get('id_posting',true)));
+    if(empty($postingan)){
+        goto finish;
+    }    
 
-    $cek_kode = $this->admin->get_array('rekapan',array( 'kode_rand' => $kode_rand, 'status' => 'Booking'));
-    if(!empty($cek_kode)){
-        goto random;
+    $format_order = $postingan['format_order']; 
+
+    if(empty($format_order)) goto finish;
+    $arr_format = explode(".", $format_order);
+
+    $qty = 1;
+    if($arr_format[1] === "QTY"){
+        $qty = $arr_kode[1];
+    }
+
+    $idmember = "";
+    if($arr_format[1] === "IDMEMBER"){
+        $idmember = $arr_kode[1];
+    }else{
+        $idmember = $arr_kode[2];
     }
 
     $kode = "ODR-" . date("ymd-his");
 
     $this->db->trans_begin();
-    $barang = $this->admin->get_array('barang',array( 'kode_barang' => strtolower($arr_kode[0]) ));
-    $member = $this->admin->get_array('members',array( 'id' => $arr_kode[1]));
+    $barang = $this->admin->get_array('barang',array( 'kode_barang' => strtoupper($arr_kode[0]) ));
+    $member = $this->admin->get_array('members',array( 'id' => $idmember));
     $exist = $this->admin->get_array('rekapan',array( 'kode_comment' => $this->input->get('kode',true), 'id_posting' => $this->input->get('id_posting',true)));
+    // print("<pre>".print_r($barang,true)."</pre>");exit();
+
     if(empty($exist) && !empty($barang) && !empty($member)){
 
         $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],$barang['berat']);
-        // print("<pre>".print_r($results_ongkir,true)."</pre>");exit();
 
         $data = array(
-            'kode_order'  => $kode,
-            'id_member' => $arr_kode[1],
-            'qty'           => 1,
+            'kode_order'    => $kode,
+            'id_member'     => $idmember,
+            'qty'           => $qty,
             'kode_product'  => strtolower($arr_kode[0]),
             'pesan'         => $this->input->get('pesan',true),
             'id_posting'    => $this->input->get('id_posting',true),
             'kode_comment'  => $this->input->get('kode',true),
-            'kode_rand'     => $kode_rand,
-            'total'         => ((1 * (float)$barang['harga']) + $kode_rand),
+            'kode_rand'     => '',
+            'total'         => (($qty * (float)$barang['harga'])),
             'ongkir'        => $results_ongkir['costs'][0]['cost'][0]['value'],
             'courier'       => $results_ongkir['name'],
             'service'       => $results_ongkir['costs'][0]['service']
@@ -159,12 +173,12 @@ KOTA : ". $this->input->post('kota',true) ."
 
             $msg = "*Kode Rekap ". $kode ."*
 -----------------------------------
-ID MEMBER : ". $arr_kode[1] ."
+ID MEMBER : ". $idmember ."
 NAMA: ". $member['nama_lengkap'] ."
 TANGGAL: ". date("Y-m-d H:i:s") ."
 
 BARANG : ". $barang['kode_barang'] ." ". $barang['nama_barang'] ."
-JUMLAH : 1
+JUMLAH : ". $qty ."
 HARGA : ". number_format($barang['harga']) ."
 
 ------------------------------------
@@ -174,7 +188,9 @@ _Tim Prastika Collection_";
     $this->admin->kirim_wa($member['nomor_wa'], $msg);
       }
     }
-    $this->db->trans_complete();                      
+    $this->db->trans_complete();        
+
+    finish:              
     $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }
 }

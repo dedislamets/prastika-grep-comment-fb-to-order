@@ -2,7 +2,7 @@
 	var oTable;
 	$(document).ready(function(){  
 		
-	 oTable = $('#ViewTable').DataTable({
+	 oTable = $('#InvoiceList').DataTable({
 			dom: 'frtip',
 			ajax: {		            
 	            "url": "order/dataTable",
@@ -12,25 +12,61 @@
 			serverSide	: true,			
 			"bPaginate": true,	
 			"autoWidth": true,
-			// "order": [[ 4, "desc" ]],
-			// columnDefs:[
-			// 	{ "width": "100px", "targets": [5,4,3,6] },
-				
-			// ]
 
 	    });
 
+		
 	})
 
+	var app = new Vue({
+	    el: "#app",
+	    mounted: function () {
+	    	this.loadRekap();
+	    },
+	    updated: function () {
+	      var that = this;
+	      
+	    },
+	    data: {
+	      id: '', 
+	      list_rekap: [],
+		  tanggal:''
+	    },
+	    methods: {
+	
+	      ganti(event){
+	    	this.loadRekap();
+	      },
+	      saveData(id_posting, id_member){
+	        var that = this;
+	        const param = { id_posting: id_posting, id_member: id_member};
+	        axios.post("<?= base_url()?>order/kirim", param)
+	        .then(response => {
+	          
+	          that.loadRekap();
+	        });
+	      },
+	      
+	      async loadRekap(){
+	        var that = this;
+	        if(that.tanggal != "") {
+	        	var sParam = { tgl : that.tanggal };
+	        }else{
+	        	var sParam = {};
+	        }
+	        try {
+	          await axios.get('<?= base_url()?>order/list', { params: sParam })
+	          .then(response => {
+	          	// debugger;
+	            that.list_rekap = response.data.rekapan;
+	          });
 
-	function hapus(val) {
-		var r = confirm("Yakin dihapus?");
-		if (r == true) {
-			
-			$.get('Barang/delete', { id: $(val).data('id') }, function(data){ 
-				window.location.reload();
-			})
-		
-		}
-	}
+	        }catch(e) {
+	          alert(e);
+	        }
+	      },
+	    
+	    }
+	});
+
 </script>

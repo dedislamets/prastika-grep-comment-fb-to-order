@@ -39,7 +39,7 @@
           <label class="tx-uppercase tx-13 tx-bold mg-b-20">Invoice Information</label>
           <p class="d-flex justify-content-between mg-b-5">
             <span>Invoice No</span>
-            <span><?= $header['kode_order'] ?></span>
+            <span><?= $header['kode_inv'] ?></span>
           </p>
           <p class="d-flex justify-content-between mg-b-5">
             <span>Posting ID</span>
@@ -47,7 +47,7 @@
           </p>
           <p class="d-flex justify-content-between mg-b-5">
             <span>Order Date:</span>
-            <span><?= $header['order_date'] ?></span>
+            <span><?= $header['tgl_invoice'] ?></span>
           </p>
         </div><!-- col -->
       </div><!-- row -->
@@ -64,13 +64,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><?= $header['kode_barang'] ?></td>
-              <td class="tx-12"><?= $header['nama_barang'] ?></td>
-              <td class="tx-center"><?= $header['qty'] ?></td>
-              <td class="tx-right"><?= number_format($header['harga']) ?></td>
-              <td class="tx-right"><?= number_format($header['qty'] * $header['harga']) ?></td>
-            </tr>
+            <?php
+              foreach ($detail as $key => $value) : ?>
+                <tr>
+                  <td><?= $value['kode_barang'] ?></td>
+                  <td class="tx-12"><?= $value['nama_barang'] ?></td>
+                  <td class="tx-center"><?= $value['qty'] ?></td>
+                  <td class="tx-right"><?= number_format($value['harga']) ?></td>
+                  <td class="tx-right"><?= number_format($value['qty'] * $value['harga']) ?></td>
+                </tr>
+
+              <?php
+              endforeach;
+
+            ?>
+            
             
             <tr>
               <td colspan="2" rowspan="4" class="valign-middle">
@@ -80,19 +88,19 @@
                 </div>
               </td>
               <td class="tx-right">SubTotal</td>
-              <td colspan="2" class="tx-right"><?= number_format($header['qty'] * $header['harga']) ?></td>
+              <td colspan="2" class="tx-right"><?= number_format($header['total'] - $header['ongkir'] - $header['rand']) ?></td>
             </tr>
             <tr>
-              <td class="tx-right">Extra Fee</td>
-              <td colspan="2"  class="tx-right"><?= $header['kode_rand'] ?></td>
+              <td class="tx-right">Kode Unik</td>
+              <td colspan="2"  class="tx-right"><?= $header['rand'] ?></td>
             </tr>
             <tr>
               <td class="tx-right">Ongkir</td>
-              <td colspan="2"  class="tx-right">0</td>
+              <td colspan="2"  class="tx-right"><?= number_format($header['ongkir']) ?></td>
             </tr>
             <tr>
               <td class="tx-right tx-uppercase tx-bold tx-inverse">Total</td>
-              <td colspan="2" class="tx-right"><h4 class="tx-primary tx-bold tx-lato"><?= number_format(($header['qty'] * $header['harga'])+ (int) $header['kode_rand'] ) ?></h4></td>
+              <td colspan="2" class="tx-right"><h4 class="tx-primary tx-bold tx-lato"><?= number_format($header['total']) ?></h4></td>
             </tr>
           </tbody>
         </table>

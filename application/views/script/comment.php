@@ -20,7 +20,7 @@
       list_rekap: [],
       status: 'Non Aktif',
       selected: false,
-      format_order: '',
+      format_order: 'KODE.QTY.IDMEMBER',
       token: '<?= $config['token'] ?>',
       id_group: '<?= $config['id_group'] ?>',
       total_rekap: 0,

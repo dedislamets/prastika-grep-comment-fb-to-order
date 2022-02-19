@@ -337,7 +337,7 @@ class Admin extends CI_Model
                 'key' => '6257ae210b00dfa4d6cda76747341c7a',
                 'origin' => $asal_kota,
                 'destination' => $tujuan_kota,
-                'weight' => floatval($berat)*100,
+                'weight' => floatval($berat)*1000,
                 'courier' => 'ide',
                 'originType' => 'subdistrict',
                 'destinationType' => 'subdistrict'),
@@ -347,6 +347,8 @@ class Admin extends CI_Model
         $response = json_decode($response, true);
 
         curl_close($curl);
+        // print("<pre>".print_r($response,true)."</pre>");exit();
+
 
         $results =  array();
         if($response['rajaongkir']['status']['code'] === 400){

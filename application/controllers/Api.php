@@ -135,37 +135,6 @@ class Api extends RestController  {
         }
     }
 
-    public function serial_get()
-    {
-        $sql = "SELECT serial,nama_ruangan as ruangan,jenis FROM barang INNER JOIN jenis_barang ON barang.`id_jenis`=jenis_barang.`id`";
-        $shift = $this->db->query($sql)->result_array();
-
-        if ($shift != FALSE) {
-            foreach ($shift as $key => $value) {
-
-                $sql = "select * FROM (
-                        select no_transaksi,current_insert,epc,'kotor' as STATUS from linen_kotor_detail WHERE epc='". $value['serial'] ."'
-                        UNION  
-                        SELECT no_transaksi,current_insert,epc,'bersih' AS STATUS FROM linen_bersih_detail WHERE epc='". $value['serial'] ."'
-                        UNION  
-                        SELECT no_transaksi,current_insert,epc,'keluar' AS STATUS FROM linen_keluar_detail WHERE epc='". $value['serial'] ."'
-                        UNION  
-                        SELECT no_transaksi,current_insert,epc,'rusak' AS STATUS FROM linen_rusak_detail WHERE epc='". $value['serial'] ."'
-                    )history ORDER BY current_insert DESC limit 1";
-
-                $history = $this->db->query($sql)->row_array();
-                $shift[$key]['status'] = (empty($history['STATUS']) ? "" : $history['STATUS']);
-            }
-            $this->output->set_content_type('application/json')->set_output(json_encode($shift));
-        }else{
-
-            $this->response( [
-                'status' => false,
-                'message' => 'No data were found'
-            ], 404 );
-        }
-    }
-
     public function jenis_get()
     {
         $shift = $this->admin->api_array('jenis_barang');
@@ -238,44 +207,6 @@ class Api extends RestController  {
         }
     }
 
-    public function infeksius_get()
-    {
-        $shift = $this->admin->api_array('tb_infeksius');
-
-        if ($shift != FALSE) {
-            $this->response([
-                'status' => true,
-                'data' => $shift
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => false,
-                'message' => 'No data were found'
-            ], 404 );
-        }
-    }
-
-    public function room_byid_get()
-    {
-        $data =array(
-            "id"=>$this->get('id'),
-        );
-        $shift = $this->admin->get_row('tb_ruangan',$data);
-
-        if ($shift != FALSE) {
-            $this->response([
-                'id' => $shift->id,
-                'ruangan' => $shift->ruangan
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => false,
-                'message' => 'No users were found'
-            ], 404 );
-        }
-    }
 
     public function cari_room_get()
     {
@@ -364,35 +295,6 @@ class Api extends RestController  {
         }
     }
 
-    public function linen_kotor_all_get()
-    {
-        $linen_kotor = $this->admin->api_array('linen_kotor');
-        $linen_kotor_detail = $this->admin->api_array('linen_kotor_detail');
-
-        foreach ($linen_kotor_detail as $key => $value) {
-            $this->db->from('barang');
-            $this->db->join('jenis_barang','barang.id_jenis=jenis_barang.id');
-            $this->db->where(array( 'serial' => $value['epc']));
-            $data_exist = $this->db->get()->row();
-            if(!empty($data_exist)){
-                $linen_kotor_detail[$key]['item'] = $data_exist->jenis;
-            }
-        }
-
-        if ($linen_kotor != FALSE) {
-            $this->response([
-                'status' => true,
-                'data' => $linen_kotor,
-                'data_detail' => $linen_kotor_detail
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => false,
-                'message' => 'No users were found'
-            ], 404 );
-        }
-    }
     public function linen_bersih_all_get()
     {
         $linen_bersih = $this->admin->api_array('linen_bersih');
@@ -423,36 +325,7 @@ class Api extends RestController  {
             ], 404 );
         }
     }
-    public function linen_keluar_all_get()
-    {
-        $linen_bersih = $this->admin->api_array('linen_keluar');
-        $linen_bersih_detail = $this->admin->api_array('linen_keluar_detail');
 
-        foreach ($linen_bersih_detail as $key => $value) {
-            $this->db->from('barang');
-            $this->db->join('jenis_barang','barang.id_jenis=jenis_barang.id');
-            $this->db->where(array( 'serial' => $value['epc']));
-            $data_exist = $this->db->get()->row();
-            if(!empty($data_exist)){
-                $linen_bersih_detail[$key]['item'] = $data_exist->jenis;
-                $linen_bersih_detail[$key]['berat'] = $data_exist->berat;
-            }
-        }
-
-        if ($linen_bersih != FALSE) {
-            $this->response([
-                'status' => true,
-                'data' => $linen_bersih,
-                'data_detail' => $linen_bersih_detail
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => false,
-                'message' => 'No users were found'
-            ], 404 );
-        }
-    }
     public function request_linen_all_get()
     {
         $linen_request = $this->admin->api_array('request_linen');
@@ -472,38 +345,7 @@ class Api extends RestController  {
             ], 404 );
         }
     }
-    public function linen_rusak_all_get()
-    {
-        $linen_bersih = $this->admin->api_array('linen_rusak');
-        $linen_bersih_detail = $this->admin->api_array('linen_rusak_detail');
-
-        foreach ($linen_bersih_detail as $key => $value) {
-            $this->db->from('barang');
-            $this->db->join('jenis_barang','barang.id_jenis=jenis_barang.id');
-            $this->db->where(array( 'serial' => $value['epc']));
-            $data_exist = $this->db->get()->row();
-            if(!empty($data_exist)){
-                $linen_bersih_detail[$key]['item'] = $data_exist->jenis;
-                $linen_bersih_detail[$key]['berat'] = $data_exist->berat;
-            }
-        }
-
-        if ($linen_bersih != FALSE) {
-            $this->response([
-                'status' => true,
-                'data' => $linen_bersih,
-                'data_detail' => $linen_bersih_detail
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => false,
-                'message' => 'No users were found'
-            ], 404 );
-        }
-    }
-
-
+  
     public function linen_kotor_get()
     {
         $linen_kotor = $this->admin->api_array('linen_kotor','DATEDIFF(CURRENT_INSERT,CURDATE()) > -4');
@@ -647,58 +489,6 @@ class Api extends RestController  {
         }
     }
 
-    public function history_get()
-    {
-        $sql = "select * FROM (
-                    select no_transaksi,current_insert,epc,'kotor' as status from linen_kotor_detail WHERE epc='". $this->get('epc') ."'
-                    UNION  
-                    SELECT no_transaksi,current_insert,epc,'bersih' AS STATUS FROM linen_bersih_detail WHERE epc='". $this->get('epc') ."'
-                    UNION  
-                    SELECT no_transaksi,current_insert,epc,'keluar' AS STATUS FROM linen_keluar_detail WHERE epc='". $this->get('epc') ."'
-                    UNION  
-                    SELECT no_transaksi,current_insert,epc,'rusak' AS STATUS FROM linen_rusak_detail WHERE epc='". $this->get('epc') ."'
-                )history ORDER BY current_insert DESC";
-        $shift = $this->db->query($sql)->result();
-
-        if ($shift != FALSE) {
-            $this->response([
-                'status' => true,
-                'data' => $shift
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => false,
-                'message' => 'No users were found'
-            ], 404 );
-        }
-    }
-    public function last_history_get()
-    {
-        $sql = "select * FROM (
-                    select no_transaksi,current_insert,epc,'kotor' as status from linen_kotor_detail WHERE epc='". $this->get('epc') ."'
-                    UNION  
-                    SELECT no_transaksi,current_insert,epc,'bersih' AS STATUS FROM linen_bersih_detail WHERE epc='". $this->get('epc') ."'
-                    UNION  
-                    SELECT no_transaksi,current_insert,epc,'keluar' AS STATUS FROM linen_keluar_detail WHERE epc='". $this->get('epc') ."'
-                    UNION  
-                    SELECT no_transaksi,current_insert,epc,'rusak' AS STATUS FROM linen_rusak_detail WHERE epc='". $this->get('epc') ."'
-                )history ORDER BY current_insert DESC limit 1";
-        $shift = $this->db->query($sql)->result();
-
-        if ($shift != FALSE) {
-            $this->response([
-                'status' => true,
-                'data' => $shift
-            ], 200 );
-        }else{
-
-            $this->response( [
-                'status' => false,
-                'message' => 'No users were found'
-            ], 404 );
-        }
-    }
 
     public function hapus_room_get()
     {
@@ -776,25 +566,28 @@ class Api extends RestController  {
         $this->response($response);
     }
 
-    public function token_post()
+    public function wa_post()
     {
-        $data =array(
-            "id_user"=>$this->post('id_user'),
-            "token"=>$this->post('token'),
-            
-        );
-        $insert = $this->db->insert("tb_token_push", $data);
-        if($insert){
-            $response['status']=200;
-            $response['error']=false;
-            $response['message']='Data berhasil ditambahkan.';
-        }else{
-            // $response['status']=502;
+        // print("<pre>".print_r($this->post(),true)."</pre>");exit();
+        $response= [];
+        if(empty($this->post('pesan', true))){
             $response['error']=true;
-            $response['message']='Data gagal ditambahkan.';
-
+            $response['msg'][]= "Tidak ada pesan dikirim";
         }
-        $this->response($response);
+        if(empty($this->post('hp', true))){
+            $response['error']=true;
+            $response['msg'][]= "Tidak ada nomor hp dikirim";
+        }
+        $job = $this->admin->api_array('job_pesan',array('sent' => 0), 'created ASC');
+
+        foreach ($job as $key => $value) {
+            $sent = $this->admin->kirim_wa($value['no_hp'],$value['pesan']);
+            $data['sent'] = 1;
+            $this->db->set($data);
+            $this->db->where('id', $value['id']);
+            $result  =  $this->db->update('job_pesan'); 
+        }
+        $this->response($response,200);
     }
 
     public function linen_kotor_post()
@@ -852,33 +645,6 @@ class Api extends RestController  {
             }
 
              
-        }
-        
-        $this->response($response);
-    }
-
-    public function linen_rusak_post()
-    {
-        $arr_date = explode("/", $this->post('tanggal'));
-        $data =array(
-            "NO_TRANSAKSI"  => $this->post('no_transaksi'),
-            "TANGGAL"       => $arr_date[2] . "-" . $arr_date[1]. "-". $arr_date[0],
-            "PIC"           => $this->post('pic'),
-            "CATATAN"        => $this->post('catatan'),
-            "DEFECT"        => $this->post('defect'),
-        );
-
-        $response['error']=true;
-        $response['message']='Data gagal ditambahkan.';
-
-        $data_exist = $this->admin->get_array('linen_rusak',array( 'NO_TRANSAKSI' => $this->post('no_transaksi')));
-        if(empty($data_exist)){
-            $insert = $this->db->insert("linen_rusak", $data);
-            if($insert){
-                $response['status']=200;
-                $response['error']=false;
-                $response['message']='Data berhasil ditambahkan.';
-            }
         }
         
         $this->response($response);
@@ -955,34 +721,6 @@ class Api extends RestController  {
         $this->response($response);
     }
 
-    public function linen_keluar_detail_post()
-    {
-        $data =array(
-            "no_transaksi"  => $this->post('no_transaksi'),
-            "epc"           => $this->post('epc'),
-        );
-
-        $response['error']=true;
-        $response['message']='Data gagal ditambahkan.';
-
-        $data_exist = $this->admin->get_array('linen_keluar_detail',array( 'no_transaksi' => $this->post('no_transaksi'), 'epc' => $this->post('epc') ));
-        if(empty($data_exist)){
-            $insert = $this->db->insert("linen_keluar_detail", $data);
-            if($insert){
-                
-                $this->db->set(array("keluar" => 1));
-                $this->db->where(array( "epc" => $this->post('epc'), "keluar" => 0 ));
-                $this->db->update('linen_bersih_detail');  
-
-                $response['status']=200;
-                $response['error']=false;
-                $response['message']='Data berhasil ditambahkan.';
-            }
-        }
-        
-        $this->response($response);
-    }
-
     public function linen_bersih_detail_post()
     {
         $data =array(
@@ -1033,31 +771,6 @@ class Api extends RestController  {
         $this->response($response);
     }
 
-    public function barang_post()
-    {
-        // print("<pre>".print_r($this->post(),true)."</pre>");exit();
-        $data =array(
-            "serial"            => $this->post('serial'),
-            "tanggal_register"  => date("Y-m-d", strtotime($this->post('tanggal_register'))),
-            "nama_ruangan"       => $this->post('nama_ruangan'),
-            "id_jenis"       => $this->post('id_jenis'),
-        );
-
-        $response['error']=true;
-        $response['message']='Data gagal ditambahkan.';
-
-        $data_exist = $this->admin->get_array('barang',array( 'serial' => $this->post('serial')));
-        if(empty($data_exist)){
-            $insert = $this->db->insert("barang", $data);
-            if($insert){
-                $response['status']=200;
-                $response['error']=false;
-                $response['message']='Data berhasil ditambahkan.';
-            }
-        }
-        
-        $this->response($response);
-    }
 
     public function send_notif_app_get(){
         error_reporting(-1);

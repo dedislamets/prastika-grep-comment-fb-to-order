@@ -15,6 +15,13 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/main/css/shamcey.css">
     <style type="text/css">
       label.error { float: none; color: red; padding-left: 0px; vertical-align: bottom; }
+      .card-tab .nav-link {
+        /*height: auto; */
+        width: 150px !important; 
+      }
+      .card-tab .card-header {
+        justify-content: left;
+      }
     </style>
   </head>
 
@@ -48,7 +55,13 @@
         <li class="nav-item">
           <a href="<?= base_url() ?>order" class="nav-link">
             <i class="icon ion-ios-list-outline"></i>
-            <span>Order</span>
+            <span>Rekapan</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="<?= base_url() ?>payment" class="nav-link">
+            <i class="icon ion-ios-book-outline"></i>
+            <span>Mutasi Payment</span>
           </a>
         </li>
         <li class="nav-item">
