@@ -579,7 +579,11 @@ class Api extends RestController  {
         //     $response['error']=true;
         //     $response['msg'][]= "Tidak ada nomor hp dikirim";
         // }
-        $job = $this->admin->api_array('job_pesan',array('sent' => 0), 'created ASC');
+        $this->db->from("job_pesan");
+        $this->db->where("sent",0);
+        $this->db->order_by("created ASC");
+        $this->db->limit(5);
+        $job = $this->db->get()->result_array();
 
         foreach ($job as $key => $value) {
             $sent = $this->admin->kirim_wa($value['no_hp'],$value['pesan']);
