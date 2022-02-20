@@ -184,8 +184,8 @@
                   
                   <div style="border: solid 1px grey;border-radius: 10px;padding: 10px;background-color: #ececec ">
                     LANJUT ORDER DI LIVE, KETIK : <br><br>
-                    KODE_BARANG.ID_MEMBER <br><br>
-                    CONTOH : 001S.19<br><br>
+                    KODE_BARANG.QTY.ID_MEMBER <br><br>
+                    CONTOH : BG1.1.A1<br><br>
 
                     NOTE : WAJIB MENGGUNAKAN TITIK TANPA ADA SPASI
                   </div>
@@ -267,6 +267,10 @@
       //         $('#provinsi').append('<option value="'+value.province+'">'+value.province+'</option>');
       //     })
       // });
+      $("submit").dblclick(function(e) {
+          e.preventDefault();
+          alert('dilarang double click');
+      });
       
       $("#provinsi").change(function(e, params){ 
           getKota($('#provinsi').val(),'kota');

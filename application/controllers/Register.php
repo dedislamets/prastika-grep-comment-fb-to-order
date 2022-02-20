@@ -47,13 +47,38 @@ class Register extends CI_Controller {
         $response['msg']= "Gagal menyimpan.. Terjadi kesalahan pada sistem";
         
         $kec_id = 0;
+
+        $cek_duplicate = $this->admin->get_array('members',array( 'nomor_wa' => $this->input->post('nomor_wa',true)));
+        if(!empty($cek_duplicate)){
+            $this->session->set_flashdata('message', 'Selamat anda sudah terdaftar di Prastika Collection <br><br>
+        <div style="color: darkblue;font-weight: bold;text-align:center">ID MEMBER :<br>' . $cek_duplicate['kode_member'] . '</div><br>
+        Harap simpan kode member ini untuk bertransaksi di facebook setiap saat.<br><div style="font-size:15px;font-weight:600">**Anda bisa kembali ke Facebook untuk bertransaksi.</div>');
+            redirect('Register');
+        }
        
         $cek_kec_id = $this->admin->get_array('tb_kecamatan',array( 'subdistrict_name' => $this->input->post('kecamatan',true)));
         if(!empty($cek_kec_id)){
             $kec_id = $cek_kec_id['subdistrict_id'];
         }
 
-        $kode = "M-" . date("ymd-his");
+        $this->db->from('members');
+        $this->db->order_by('id','desc');
+        $this->db->limit(1);
+        $get_last = $this->db->get()->row_array();
+        $kode = 'A1';
+        if(!empty($get_last)){
+            $urut = preg_replace('/[^0-9]/', '', $get_last['kode_member']);
+            $prefix = preg_replace('/[^a-zA-Z]/', '',$get_last['kode_member']);
+            // print("<pre>".print_r($prefix,true)."</pre>");exit();
+  
+            if($urut > 999){
+                ++$prefix;
+                $kode = $prefix . $urut;
+            }else{
+                $kode = $prefix . ((int)$urut+1);
+            }
+        }
+
         $data = array(
             'email'   => $this->input->post('email',true),
             'nomor_wa'   => $this->input->post('nomor_wa',true),
@@ -94,19 +119,19 @@ class Register extends CI_Controller {
 
         $this->db->trans_complete();                      
         $this->session->set_flashdata('message', 'Selamat anda sudah terdaftar di Prastika Collection <br><br>
-        <div style="color: darkblue;font-weight: bold;text-align:center">ID MEMBER :<br>' . $last_id . '</div><br>
+        <div style="color: darkblue;font-weight: bold;text-align:center">ID MEMBER :<br>' . $kode . '</div><br>
         Harap simpan kode member ini untuk bertransaksi di facebook setiap saat.<br><div style="font-size:15px;font-weight:600">**Anda bisa kembali ke Facebook untuk bertransaksi.</div>');
 
 
         $msg = "*Selamat anda sudah terdaftar di Prastika Collection*
 ==================================================
-ID MEMBER : ". $last_id ."
+ID MEMBER : ". $kode ."
 EMAIL: ". $this->input->post('email',true) ."
 NOMOR : ". $this->input->post('nomor_wa',true) ."
 KOTA : ". $this->input->post('kota',true) ."
 
 *Note : **Harap simpan kode member ini untuk bertransaksi di facebook setiap saat. Anda bisa kembali ke Facebook untuk bertransaksi.*";
-        $this->admin->simpan_wa($this->input->post('nomor_wa',true), $msg);
+        // $this->admin->simpan_wa($this->input->post('nomor_wa',true), $msg);
 
         redirect('Register');
     }
