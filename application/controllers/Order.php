@@ -257,8 +257,9 @@ class Order extends CI_Controller {
 
         Bank Transfer
 
-        BCA 0183139867
-        Hendra Ardiansyah (otomatis sekitar 5 - 10 menit)
+        BCA 5780825803
+        Bri 144101008669508
+        SATYA ADRIANA ADNAN (otomatis sekitar 5 - 10 menit)
         Rp ". number_format($rekap['Total']+ $ongkir + $kode_rand) ."
 
         Invoice expired ". $exp ."
