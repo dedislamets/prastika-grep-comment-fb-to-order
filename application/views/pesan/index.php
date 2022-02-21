@@ -22,7 +22,7 @@
           <div class="card-body pd-sm-30">
 
             <div class="table-wrapper">
-              <table id="ViewTable" class="table display responsive nowrap">
+              <table id="ViewTable" class="table responsive nowrap">
                 <thead>
                   <tr>
                     <th class="wd-15p">ID</th>

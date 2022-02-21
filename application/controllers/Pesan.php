@@ -104,7 +104,7 @@ class Pesan extends CI_Controller {
           $data[] = array( 
                       $r->id,
                       $r->no_hp,
-                      $r->pesan,
+                      '<a href="#">Lihat Pesan</a>',
                       $r->created,
                  );
       }
