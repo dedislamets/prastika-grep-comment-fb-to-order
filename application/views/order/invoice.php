@@ -25,7 +25,7 @@
             Tel No: 0856-0364-1272<br>
           Email: prastikaadnan3@gmail.com</p>
         </div>
-      </div><!-- d-flex -->
+      </div>
 
       <div class="row mg-t-20">
         <div class="col-md">
@@ -50,7 +50,7 @@
             <span><?= $header['tgl_invoice'] ?></span>
           </p>
         </div><!-- col -->
-      </div><!-- row -->
+      </div>
 
       <div class="table-responsive mg-t-40">
         <table class="table">
@@ -104,13 +104,12 @@
             </tr>
           </tbody>
         </table>
-      </div><!-- table-responsive -->
+      </div>
 
       <hr class="mg-b-60">
 
-      <a href="#" class="btn btn-primary btn-block">Cetak</a>
-
-    </div><!-- card-body -->
-  </div><!-- card -->
+      <a href="<?= base_url() ?>cetak?p=invoice&id=<?= $header['kode_inv'] ?>" target="_blank" class="btn btn-primary btn-block">Cetak</a>
+    </div>
+  </div>
 
 </div>

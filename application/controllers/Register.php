@@ -169,7 +169,7 @@ KOTA : ". $this->input->post('kota',true) ."
 
     $this->db->trans_begin();
     $barang = $this->admin->get_array('barang',array( 'kode_barang' => strtoupper($arr_kode[0]) ));
-    $member = $this->admin->get_array('members',array( 'id' => $idmember));
+    $member = $this->admin->get_array('members',array( 'kode_member' => $idmember));
     $exist = $this->admin->get_array('rekapan',array( 'kode_comment' => $this->input->get('kode',true), 'id_posting' => $this->input->get('id_posting',true)));
     // print("<pre>".print_r($barang,true)."</pre>");exit();
 
