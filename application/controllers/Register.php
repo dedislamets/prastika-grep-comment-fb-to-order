@@ -73,7 +73,7 @@ class Register extends CI_Controller {
   
             if($urut > 999){
                 ++$prefix;
-                $kode = $prefix . $urut;
+                $kode = $prefix . '1';
             }else{
                 $kode = $prefix . ((int)$urut+1);
             }
