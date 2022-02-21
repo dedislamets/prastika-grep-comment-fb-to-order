@@ -353,7 +353,7 @@ class Order extends CI_Controller {
       $this->db->limit($length,$start);
       // $this->db->select("*");
       $this->db->from("invoice");
-      $this->db->join("members","members.id=invoice.id_member");
+      $this->db->join("members","members.kode_member=invoice.id_member");
 
       $pengguna = $this->db->get();
       $data = array();
