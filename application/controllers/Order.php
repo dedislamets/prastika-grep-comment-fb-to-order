@@ -186,7 +186,7 @@ class Order extends CI_Controller {
     $this->db->select("id_posting,MAX(order_date) tgl_order,id_member,nama_lengkap,SUM(qty) AS qty, SUM(total) Total , SUM(qty*berat) AS berat");
     $this->db->from("rekapan");
     $this->db->join("barang","barang.kode_barang=rekapan.kode_product");
-    $this->db->join("members","members.id=rekapan.id_member");
+    $this->db->join("members","members.kode_member=rekapan.id_member");
     $this->db->group_by('id_posting,id_member,nama_lengkap');
     $this->db->where(array(
                         "id_posting" => $jsonArray['id_posting'], 
@@ -194,7 +194,7 @@ class Order extends CI_Controller {
                       ));
     $rekap = $this->db->get()->row_array();
 
-    $member = $this->admin->get_array('members',array( 'id' => $rekap['id_member']));
+    $member = $this->admin->get_array('members',array( 'kode_member' => $rekap['id_member']));
     $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],floatval($rekap['berat']));
       // print("<pre>".print_r($results_ongkir,true)."</pre>");exit();
     $ongkir = $results_ongkir['costs'][0]['cost'][0]['value'];
