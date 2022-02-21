@@ -146,8 +146,8 @@ class Order extends CI_Controller {
     $this->db->select("rekapan.id_posting,MAX(order_date) tgl_order,rekapan.id_member,nama_lengkap,SUM(rekapan.qty) AS qty, SUM(rekapan.total) Total , SUM(rekapan.qty*barang.berat) AS berat");
     $this->db->from("rekapan");
     $this->db->join("barang","barang.kode_barang=rekapan.kode_product");
-    $this->db->join("members","members.id=rekapan.id_member");
-    $this->db->join("invoice","members.id=invoice.id_member and invoice.id_posting=rekapan.id_posting","left");
+    $this->db->join("members","members.kode_member=rekapan.id_member");
+    $this->db->join("invoice","members.kode_member=invoice.id_member and invoice.id_posting=rekapan.id_posting","left");
     $this->db->group_by('rekapan.id_posting,rekapan.id_member,nama_lengkap');
     $this->db->where('kirim is null');
     if(!empty($this->input->get("tgl",true))){
@@ -156,7 +156,7 @@ class Order extends CI_Controller {
     $data['rekapan'] = $this->db->get()->result_array();
 
     foreach ($data['rekapan'] as $key => $value) {
-      $member = $this->admin->get_array('members',array( 'id' => $value['id_member']));
+      $member = $this->admin->get_array('members',array( 'kode_member' => $value['id_member']));
       $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],floatval($value['berat']));
       $data['rekapan'][$key]['ongkir'] = $results_ongkir['costs'][0]['cost'][0]['value'];
 
