@@ -64,6 +64,7 @@ class Members extends CI_Controller {
             6=>'kecamatan',
             7=>'kota',
             8=>'provinsi',
+	    9 =>'kode_member'
         );
         $valid_sort = array(
             0=>'id',
@@ -75,6 +76,7 @@ class Members extends CI_Controller {
             6=>'kecamatan',
             7=>'kota',
             8=>'provinsi',
+	    9 =>'kode_member'
         );
         if(!isset($valid_sort[$col]))
         {
@@ -115,6 +117,7 @@ class Members extends CI_Controller {
 
             $data[] = array( 
                         $r->id,
+		    	$r->kode_member,
                         $r->email,
                         $r->nomor_wa,
                         $r->nama_lengkap,
