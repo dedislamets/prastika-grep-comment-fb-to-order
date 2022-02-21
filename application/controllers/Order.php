@@ -425,7 +425,7 @@ class Order extends CI_Controller {
 
       		$this->db->from("invoice");
 	      	// $this->db->join("barang","barang.kode_barang=rekapan.kode_product");
-	      	$this->db->join("members","members.id=invoice.id_member");
+	      	$this->db->join("members","members.kode_member=invoice.id_member");
 	      	$this->db->where("kode_inv",$id);
         	$data['header'] = $this->db->get()->row_array();
 
