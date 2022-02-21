@@ -26,6 +26,7 @@
                 <thead>
                   <tr>
                     <th class="wd-15p">ID</th>
+                    <th class="wd-15p">Kode Member</th>
                     <th class="wd-15p">Email</th>
                     <th class="wd-20p">No WA</th>
                     <th class="wd-15p">Nama Lengkap</th>
