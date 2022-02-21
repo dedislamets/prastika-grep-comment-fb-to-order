@@ -71,13 +71,13 @@ class Comment extends CI_Controller {
 	    $data['data'] = $this->admin->get_result_array('rekapan',array( 'id_posting' => $id));
 	    $qty=0;
 	    foreach ($data['data'] as $key => $value) {
-	        $routing = $this->admin->get_array('members',array( 'id' => $value['id_member']));
+	        $routing = $this->admin->get_array('members',array( 'kode_member' => $value['id_member']));
 	        $barang = $this->admin->get_array('barang',array( 'kode_barang' => $value['kode_product']));
 	        $data['data'][$key]['nama_lengkap'] = $routing['nama_lengkap'];
 	        $data['data'][$key]['nama_facebook'] = $routing['nama_facebook'];
 	        $data['data'][$key]['nomor_wa'] = $routing['nomor_wa'];
 	        $data['data'][$key]['kota'] = $routing['kota'];
-	        $data['data'][$key]['id_member'] = $routing['id'];
+	        $data['data'][$key]['id_member'] = $routing['kode_member'];
 	        $data['data'][$key]['nama_barang'] = $barang['nama_barang'];
 
 	        $qty +=(int)$value['qty'];
