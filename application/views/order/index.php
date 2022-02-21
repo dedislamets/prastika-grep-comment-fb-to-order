@@ -78,8 +78,8 @@
                                 <td>{{log.id_member}} - {{log.nama_lengkap}}</td>
                                 <td>{{log.qty}}</td>
                                 <td>{{log.berat}}</td>
-                                <td>{{ Number(log.ongkir).toLocaleString() }}</td>
                                 <td>{{ Number(log.Total).toLocaleString() }}</td>
+                                <td>{{ Number(log.ongkir).toLocaleString() }}</td>
                                 <!-- <td><i class='icon ion-checkmark' style='color: green'></i></td> -->
                                 <td><a href='#' class='btn btn-warning btn-sm' @click="saveData(log.id_posting,log.id_member)">Kirim Notifikasi</a></td>
                             </tr>
