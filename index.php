@@ -1,5 +1,5 @@
 <?php
-header('location: maintenance.html');
+// header('location: maintenance.html');
 /**
  * CodeIgniter
  *
