@@ -1,5 +1,14 @@
 <?php
+ini_set('memory_limit','512M'); 
+ini_set('sqlsrv.ClientBufferMaxKBSize','524288');
+ini_set('pdo_sqlsrv.client_buffer_max_kb_size','524288');
+
 defined('BASEPATH') OR exit('No direct script access allowed');
+
+require_once APPPATH . 'third_party/spout-2.7.2/src/Spout/Autoloader/autoload.php';
+use Box\Spout\Writer\WriterFactory;
+use Box\Spout\Common\Type;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -297,9 +306,61 @@ class Members extends CI_Controller {
 
     public function export()
     {
+      $this->db->from("members");
+      
+      $data = $this->db->get()->result();
+
+      $writer = WriterFactory::create(Type::XLSX);
+
+      $writer->openToBrowser("Data Members.xlsx");
+
+      $sheet = $writer->getCurrentSheet();
+      $sheet->setName('Rekap');
+
+      $header = [
+          'No',
+          'KODE',
+          'NAMA LENGKAP',
+          "FACEBOOK",
+          'NO WA',
+          'Kelurahan',
+          'Kecamatan',
+          'Kota',
+          'Provinsi',
+          'Admin',
+      ];
+      $writer->addRow($header);
+
+      $data_excel   = array(); 
+      $no     = 1;
+
+      foreach ($data as $key) {
+          $anggota = array(
+              $no++,
+              $key->kode_member,
+              $key->nama_lengkap,
+              $key->nama_facebook,
+              $key->nomor_wa,
+              $key->kelurahan,
+              $key->kecamatan,
+              $key->kota,
+              $key->provinsi,
+              '',
+          );
+
+          array_push($data_excel, $anggota); 
+      }
+
+      $writer->addRows($data_excel);
+
+      $writer->close(); 
+    }
+
+    public function export_lama()
+    {
 
         $this->db->from("members");
-        // $this->db->where("admin","");
+        $this->db->limit(1000);
         
         $data = $this->db->get()->result();
 
