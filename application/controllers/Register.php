@@ -211,7 +211,7 @@ HARGA : ". number_format($barang['harga']) ."
 *Note : Harga diatas belum termasuk Ongkir.*
 
 _Tim Prastika Collection_";
-    $this->admin->simpan_wa($member['nomor_wa'], $msg);
+    // $this->admin->simpan_wa($member['nomor_wa'], $msg);
       }
     }
     $this->db->trans_complete();        

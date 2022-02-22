@@ -299,7 +299,7 @@ class Members extends CI_Controller {
     {
 
         $this->db->from("members");
-        $this->db->where("admin","");
+        // $this->db->where("admin","");
         
         $data = $this->db->get()->result();
 
