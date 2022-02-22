@@ -483,4 +483,18 @@ _Tim Prastika Collection_";
 
       	}                 
   	}
+
+    public function listinv()
+    {   
+      if($this->admin->logged_id())
+      {
+        $data['title'] = 'Invoice';
+        $data['main'] = 'order/listinvoice';
+        $data['js'] = 'script/listinvoice';
+        $data['rekapan'] = array();
+
+        $this->load->view('dashboard',$data,FALSE); 
+
+      }
+    }
 }

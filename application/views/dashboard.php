@@ -59,6 +59,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="<?= base_url() ?>order/listinv" class="nav-link">
+            <i class="icon ion-ios-list-outline"></i>
+            <span>Invoice</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="<?= base_url() ?>payment" class="nav-link">
             <i class="icon ion-ios-book-outline"></i>
             <span>Mutasi Payment</span>
