@@ -298,7 +298,7 @@ TOTAL DIBAYAR : ". number_format($rekap['Total']+ $ongkir + $kode_rand) ."
 Bank Transfer
 
 BCA 5780825803
-Bri 144101008669508
+BRI 144101008669508
 SATYA ADRIANA ADNAN (otomatis sekitar 5 - 10 menit)
 Rp ". number_format($rekap['Total']+ $ongkir + $kode_rand) ."
 
