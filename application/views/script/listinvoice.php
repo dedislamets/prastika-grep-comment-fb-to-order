@@ -18,4 +18,14 @@
 		
 	})
 
+	function hapus(val) {
+		var r = confirm("Yakin dihapus?");
+		if (r == true) {
+			
+			$.get('<?= base_url() ?>order/delete', { id: $(val).data('id') }, function(data){ 
+				window.location.reload();
+			})
+		
+		}
+	}
 </script>

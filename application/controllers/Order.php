@@ -154,6 +154,7 @@ class Order extends CI_Controller {
       $this->db->where('DATE(order_date)', $this->input->get("tgl",true));
     }
     $data['rekapan'] = $this->db->get()->result_array();
+    // echo $this->db->last_query();exit();
 
     foreach ($data['rekapan'] as $key => $value) {
       $member = $this->admin->get_array('members',array( 'kode_member' => $value['id_member']));
@@ -413,7 +414,10 @@ _Tim Prastika Collection_";
                       $r->status,
                       '<a href="'. base_url() .'order/invoice/'. $r->kode_inv .'" class="btn btn-warning btn-sm " >
                         <i class="icofont icofont-ui-edit"></i>Detail
-                      </a>',
+                      </a>
+                      <button type="button" rel="tooltip" class="btn btn-danger btn-sm " onclick="hapus(this)"  data-id="'.$r->id.'" >
+                        <i class="icofont icofont-trash"></i>Hapus
+                      </button>',
                  );
       }
       $total_pengguna = $this->totalPengguna($search, $valid_columns);
@@ -497,5 +501,16 @@ _Tim Prastika Collection_";
         $this->load->view('dashboard',$data,FALSE); 
 
       }
+    }
+
+    public function delete()
+    {
+      $response = [];
+      $response['error'] = TRUE; 
+      if($this->admin->deleteTable("id",$this->input->get('id'), 'invoice' )){
+        $response['error'] = FALSE;
+      } 
+
+      $this->output->set_content_type('application/json')->set_output(json_encode($response)); 
     }
 }
