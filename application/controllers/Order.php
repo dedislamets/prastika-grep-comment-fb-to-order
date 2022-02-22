@@ -392,7 +392,7 @@ _Tim Prastika Collection_";
           }                 
       }
       $this->db->limit($length,$start);
-      // $this->db->select("*");
+      $this->db->select("invoice.*,members.nama_lengkap");
       $this->db->from("invoice");
       $this->db->join("members","members.kode_member=invoice.id_member");
 
