@@ -288,7 +288,7 @@ class Admin extends CI_Model
         return $response;
     }
 
-    function cek_ongkir($asal_kota,$tujuan_kota, $berat){
+    function cek_ongkir($asal_kota,$tujuan_kota, $berat, $kurir='ide'){
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -305,7 +305,7 @@ class Admin extends CI_Model
                 'origin' => $asal_kota,
                 'destination' => $tujuan_kota,
                 'weight' => floatval($berat)*1000,
-                'courier' => 'ide',
+                'courier' => $kurir,
                 'originType' => 'subdistrict',
                 'destinationType' => 'subdistrict'),
         ));

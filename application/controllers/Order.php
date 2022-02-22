@@ -84,7 +84,7 @@ class Order extends CI_Controller {
 
           $cek_kode = $this->admin->get_array('invoice',array( 'total' => (float)$credit, 'status' => 'Billing'));
 
-          if(!empty($cek_kode)){
+          if(!empty($cek_kode) && $value_mutasi->type == 'CR'){
               
             $data = array(
                 // 'metode_bayar'  => $response->module,
@@ -159,7 +159,7 @@ class Order extends CI_Controller {
       $member = $this->admin->get_array('members',array( 'kode_member' => $value['id_member']));
       $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],floatval($value['berat']));
       $data['rekapan'][$key]['ongkir'] = $results_ongkir['costs'][0]['cost'][0]['value'];
-
+      $data['rekapan'][$key]['kurir'] = 'ide';
       $this->db->select("kode_order,kode_barang,nama_barang,qty,berat,harga");
       $this->db->from("rekapan");
       $this->db->join("barang","barang.kode_barang=rekapan.kode_product");
@@ -169,6 +169,44 @@ class Order extends CI_Controller {
       $data['rekapan'][$key]['detail'] = $detail;
     }
     $this->output->set_content_type('application/json')->set_output(json_encode($data));
+  }
+
+  public function kurir()
+  {
+    try {
+      $jsonArray = json_decode(file_get_contents('php://input'),true); 
+      $this->db->select("id_posting,MAX(order_date) tgl_order,id_member,nama_lengkap,SUM(qty) AS qty, SUM(total) Total , SUM(qty*berat) AS berat");
+      $this->db->from("rekapan");
+      $this->db->join("barang","barang.kode_barang=rekapan.kode_product");
+      $this->db->join("members","members.kode_member=rekapan.id_member");
+      $this->db->group_by('id_posting,id_member,nama_lengkap');
+      $this->db->where(array(
+                          "id_posting" => $jsonArray['id_posting'], 
+                          "id_member" => $jsonArray['id_member']
+                        ));
+      $rekap = $this->db->get()->row_array();
+
+      $member = $this->admin->get_array('members',array( 'kode_member' => $rekap['id_member']));
+      $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],floatval($rekap['berat']), $jsonArray['kurir']);
+        // print("<pre>".print_r($results_ongkir,true)."</pre>");exit();
+      if(empty($results_ongkir['costs'])){
+        $response['error']= true;
+        $response['msg']= 'Ongkir tidak ditemukan.!!';
+      }else{
+        $ongkir = $results_ongkir['costs'][0]['cost'][0]['value'];
+
+        $response['error']= FALSE;
+        $response['ongkir']= $ongkir;
+        $response['kurir']= $jsonArray['kurir'];
+      }
+      
+
+    } catch (Exception $e) {
+      $response['error']= true;
+      $response['msg']= 'Terjadi kesalahan..';
+    }
+    
+    $this->output->set_content_type('application/json')->set_output(json_encode($response));
   }
   public function kirim()
   {
@@ -195,11 +233,11 @@ class Order extends CI_Controller {
     $rekap = $this->db->get()->row_array();
 
     $member = $this->admin->get_array('members',array( 'kode_member' => $rekap['id_member']));
-    $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],floatval($rekap['berat']));
+    $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],floatval($rekap['berat']), $jsonArray['kurir']);
       // print("<pre>".print_r($results_ongkir,true)."</pre>");exit();
     $ongkir = $results_ongkir['costs'][0]['cost'][0]['value'];
     $tgl =date("Y-m-d H:i:s");
-    $exp = date('Y-m-d H:i:s', strtotime($tgl. ' + 2 days'));
+    $exp = date('Y-m-d H:i:s', strtotime($tgl. ' + 1 days'));
     $data = array(
         'kode_inv'      => $kode,
         'tgl_invoice'   => $tgl ,
@@ -210,6 +248,7 @@ class Order extends CI_Controller {
         'berat'   => $rekap['berat'],
         'total'   => $rekap['Total']+ $ongkir + $kode_rand,
         'ongkir'  => $ongkir,
+        'kurir'   => $jsonArray['kurir'],
         'kirim'   => 1,
         'rand'    => $kode_rand
     );
@@ -238,36 +277,37 @@ class Order extends CI_Controller {
           $subtotal += $value['harga'];
         }
 
-        $msg = "
-        *INVOICE ". $kode ."*
-        -----------------------------------
-        ID MEMBER : ". $jsonArray['id_member'] ."
-        NAMA: ". $rekap['nama_lengkap'] ."
-        TANGGAL: ". $tgl ."
-        -----------------------------------
-        ";
-        $msg .= $msg_detail;  
+$msg = "
+*INVOICE ". $kode ."*
+-----------------------------------
+ID MEMBER : ". $jsonArray['id_member'] ."
+NAMA: ". $rekap['nama_lengkap'] ."
+TANGGAL: ". $tgl ."
+-----------------------------------
+";
+$msg .= $msg_detail;  
 
-        $msg .="
-        ------------------------------------
-        SUBTOTAL : ". number_format($subtotal) ."
-        ONGKIR : ". number_format($ongkir) ."
-        TOTAL DIBAYAR : ". number_format($rekap['Total']+ $ongkir + $kode_rand) ."
-        ------------------------------------
+$msg .="
+------------------------------------
+SUBTOTAL : ". number_format($subtotal) ."
+ONGKIR : ". number_format($ongkir) ."
+KD UNIQ : ". $kode_rand ."
+TOTAL DIBAYAR : ". number_format($rekap['Total']+ $ongkir + $kode_rand) ."
+------------------------------------
 
-        Bank Transfer
+Bank Transfer
 
-        BCA 5780825803
-        Bri 144101008669508
-        SATYA ADRIANA ADNAN (otomatis sekitar 5 - 10 menit)
-        Rp ". number_format($rekap['Total']+ $ongkir + $kode_rand) ."
+BCA 5780825803
+Bri 144101008669508
+SATYA ADRIANA ADNAN (otomatis sekitar 5 - 10 menit)
+Rp ". number_format($rekap['Total']+ $ongkir + $kode_rand) ."
 
-        Invoice expired ". $exp ."
+Invoice expired ". $exp ."
 
-        *Note : pembayaran kamu akan kami proses secara otomatis. 
-        Jika pembayaran kamu masih belum terproses, silahkan hubungi kami.*
+*Note : pembayaran kamu akan kami proses secara otomatis. 
+Jika pembayaran kamu masih belum terproses, silahkan hubungi kami.*
 
-        _Tim Prastika Collection_";
+_Tim Prastika Collection_";
         $this->admin->simpan_wa($member['nomor_wa'], $msg);
     }
 

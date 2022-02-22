@@ -37,16 +37,35 @@
 	      ganti(event){
 	    	this.loadRekap();
 	      },
-	      saveData(id_posting, id_member){
+	      saveData(id_posting, id_member, kurir){
 	        var that = this;
-	        const param = { id_posting: id_posting, id_member: id_member};
+	        const param = { id_posting: id_posting, id_member: id_member, kurir: kurir };
 	        axios.post("<?= base_url()?>order/kirim", param)
 	        .then(response => {
 	          
 	          that.loadRekap();
 	        });
 	      },
-	      
+	      onChange(event, id_posting, id_member) {
+            const param = { id_posting: id_posting, id_member: id_member, kurir: event.target.value };
+	        axios.post("<?= base_url()?>order/kurir", param)
+	        .then(response => {
+	        	if(response.data.error==false){
+	        		for (let val of app.list_rekap) {
+	        			if(val.id_member == id_member){
+	        				val.ongkir = response.data.ongkir ;
+	        			}
+	        		}
+	        	}else{
+	        		alert(response.data.msg);
+	        		for (let val of app.list_rekap) {
+	        			if(val.id_member == id_member){
+	        				val.kurir = 'ide' ;
+	        			}
+	        		}
+	        	}
+	        });
+          },
 	      async loadRekap(){
 	        var that = this;
 	        if(that.tanggal != "") {

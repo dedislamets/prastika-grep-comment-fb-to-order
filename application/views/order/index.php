@@ -64,6 +64,9 @@
                             <th>
                               Ongkir
                             </th>
+                            <th>
+                              Kurir
+                            </th>
                           
                             <th style="width: 100px;">
                               Action
@@ -79,9 +82,15 @@
                                 <td>{{log.qty}}</td>
                                 <td>{{log.berat}}</td>
                                 <td>{{ Number(log.Total).toLocaleString() }}</td>
-                                <td>{{ Number(log.ongkir).toLocaleString() }}</td>
+                                <td :id="'ong_'+ log.id_member">{{ Number(log.ongkir).toLocaleString() }}</td>
+                                <td>
+                                    <select :name="'kurir_' + log.id_member" @change="onChange($event,log.id_posting, log.id_member)" v-model="log.kurir">
+                                        <option value="ide">IDE</option>
+                                        <option value="jne">JNE</option>    
+                                    </select>
+                                </td>
                                 <!-- <td><i class='icon ion-checkmark' style='color: green'></i></td> -->
-                                <td><a href='#' class='btn btn-warning btn-sm' @click="saveData(log.id_posting,log.id_member)">Kirim Notifikasi</a></td>
+                                <td><a href='#' class='btn btn-warning btn-sm' @click="saveData(log.id_posting,log.id_member,log.kurir)">Kirim Notifikasi</a></td>
                             </tr>
                             <tr>
                                 <td></td>
