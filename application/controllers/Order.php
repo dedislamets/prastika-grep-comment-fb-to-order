@@ -97,7 +97,7 @@ class Order extends CI_Controller {
             $this->db->where('kode_inv', $cek_kode['kode_inv']);
             $result  =  $this->db->update('invoice');  
 
-            $member = $this->admin->get_array('members',array( 'id' => $cek_kode['id_member'] ));
+            $member = $this->admin->get_array('members',array( 'kode_member' => $cek_kode['id_member'] ));
             $msg = "*Pembayaran Diterima*
                     -----------------------------------
                     NO INVOICE : ". $cek_kode['kode_order'] ."
