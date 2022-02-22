@@ -157,8 +157,9 @@ class Order extends CI_Controller {
 
     foreach ($data['rekapan'] as $key => $value) {
       $member = $this->admin->get_array('members',array( 'kode_member' => $value['id_member']));
-      $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],floatval($value['berat']));
-      $data['rekapan'][$key]['ongkir'] = $results_ongkir['costs'][0]['cost'][0]['value'];
+      // $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],floatval($value['berat']));
+      // $data['rekapan'][$key]['ongkir'] = $results_ongkir['costs'][0]['cost'][0]['value'];
+      $data['rekapan'][$key]['ongkir'] = 0;
       $data['rekapan'][$key]['kurir'] = 'ide';
       $this->db->select("kode_order,kode_barang,nama_barang,qty,berat,harga");
       $this->db->from("rekapan");
