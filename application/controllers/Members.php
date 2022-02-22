@@ -296,7 +296,7 @@ class Members extends CI_Controller {
     public function export()
     {
 
-        $this->db->from("members a");
+        $this->db->from("members");
         $this->db->where("admin is null");
         
         $data = $this->db->get()->result();
@@ -320,7 +320,7 @@ class Members extends CI_Controller {
           ->setCellValue('E1', 'Facebook')
           ->setCellValue('F1', 'Kelurahan')
           ->setCellValue('G1', 'Kecamatan')
-          ->setCellValue('H1', 'Kota');
+          ->setCellValue('H1', 'Kota')
           ->setCellValue('I1', 'Provinsi');
 
         $spreadsheet->getActiveSheet()->getStyle('A1:I1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('f4f403');
