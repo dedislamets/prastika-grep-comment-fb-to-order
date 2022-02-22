@@ -286,22 +286,26 @@
         $.get('<?= base_url()?>register/getKota', { prov: val  }, function(data){ 
 
           $('#' + name).empty();
-            $.each(data,function(i,value){
-                  $('#' + name).append('<option value="'+ value.type + '. ' + value.city_name +'">'+ value.type + ' ' + value.city_name +'</option>');
-              })
-          });
+          var kota_def = '';
+          $.each(data,function(i,value){
+            if(i==0) kota_def = value.type + '. ' + value.city_name;
+            $('#' + name).append('<option value="'+ value.type + '. ' + value.city_name +'">'+ value.type + ' ' + value.city_name +'</option>');
+          })
 
-          $('#kecamatan').empty();
-          $('#kecamatan').append('<option value="">Pilih Kecamatan</option>');
+          getKecamatan(kota_def,'kecamatan');
 
-          $('#kelurahan').empty();
-          $('#kelurahan').append('<option value="">Pilih Kelurahan</option>');
+        });
+          
+
+          // $('#kelurahan').empty();
+          // $('#kelurahan').append('<option value="">Pilih Kelurahan</option>');
       }
       function getKecamatan(val,name){
         $.get('<?= base_url()?>register/getKecamatan', { kota: val  }, function(data){ 
 
           $('#' + name).empty();
-            $.each(data,function(i,value){
+          $('#kecamatan').append('<option value="">Pilih Kecamatan</option>');
+          $.each(data,function(i,value){
                   $('#' + name).append('<option value="'+value.subdistrict_name+'">'+value.subdistrict_name+'</option>');
               })
           });
