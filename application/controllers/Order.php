@@ -312,7 +312,7 @@ Invoice expired ". $exp ."
 Jika pembayaran kamu masih belum terproses, silahkan hubungi kami.*
 
 _Tim Prastika Collection_";
-        $this->admin->simpan_wa($jsonArray['admin'], $msg);
+        $this->admin->kirim_wa($jsonArray['admin'], $msg);
     }
 
     $this->db->trans_complete();   
