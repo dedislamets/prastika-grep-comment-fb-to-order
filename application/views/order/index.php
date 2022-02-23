@@ -26,7 +26,6 @@
       <div class="card-header bg-primary">
         <nav class="nav">
           <a href="#rekapan" class="nav-link active" data-toggle="tab">Rekapan</a>
-          <a href="#invoice" class="nav-link" data-toggle="tab">Invoice</a>
         </nav>
       </div><!-- card-header -->
       <div class="card-body tab-content">
@@ -132,51 +131,6 @@
                 </table>
             </div>
         </div>
-        <div id="invoice" class="tab-pane pd-10">
-            <div class="table-wrapper">
-                <table id="InvoiceList" class="table table-striped" width="100%">
-                    <thead class="text-primary">
-                        <tr>
-                            <th style="width: 100px">
-                              No Invoice
-                            </th>
-                            <th>
-                              Tgl Invoice
-                            </th>
-                            <th>
-                              Expired
-                            </th>
-                            <th>
-                              Nama Pemesan
-                            </th>
-                            
-                            <th>
-                              Qty
-                            </th>
-                            <th>
-                              Berat
-                            </th>
-                            <th>
-                              Ongkir
-                            </th>
-                            <th>
-                              Subtotal
-                            </th>
-                            <th>
-                              Status
-                            </th>
-                            <th>
-                              Aksi
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
 
       </div><!-- card-body -->
     </div>

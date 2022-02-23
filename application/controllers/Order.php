@@ -455,7 +455,7 @@ _Tim Prastika Collection_";
       	}
 
 	    $this->db->from("invoice");
-      $this->db->join("members","members.id=invoice.id_member");
+      $this->db->join("members","members.kode_member=invoice.id_member");
 	    $query = $this->db->get();
 	    $result = $query->row();
 	    if(isset($result)) return $result->num;
