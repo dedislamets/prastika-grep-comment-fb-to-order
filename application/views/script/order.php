@@ -37,9 +37,17 @@
 	      ganti(event){
 	    	this.loadRekap();
 	      },
-	      saveData(id_posting, id_member, kurir){
+	      saveData(id_posting, id_member, kurir, admin){
+	      	if(kurir == ""){
+	      		alert('Kurir belum dipilih');
+	      		return;
+	      	}
+	      	if(admin == ""){
+	      		alert('Admin belum dipilih');
+	      		return;
+	      	}
 	        var that = this;
-	        const param = { id_posting: id_posting, id_member: id_member, kurir: kurir };
+	        const param = { id_posting: id_posting, id_member: id_member, kurir: kurir, admin: admin };
 	        axios.post("<?= base_url()?>order/kirim", param)
 	        .then(response => {
 	          
@@ -47,6 +55,7 @@
 	        });
 	      },
 	      onChange(event, id_posting, id_member) {
+
             const param = { id_posting: id_posting, id_member: id_member, kurir: event.target.value };
 	        axios.post("<?= base_url()?>order/kurir", param)
 	        .then(response => {
@@ -60,7 +69,8 @@
 	        		alert(response.data.msg);
 	        		for (let val of app.list_rekap) {
 	        			if(val.id_member == id_member){
-	        				val.kurir = 'ide' ;
+	        				val.kurir = '' ;
+	        				val.ongkir = 0 ;
 	        			}
 	        		}
 	        	}

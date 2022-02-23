@@ -67,7 +67,9 @@
                             <th>
                               Kurir
                             </th>
-                          
+                            <th>
+                              Admin
+                            </th>
                             <th style="width: 100px;">
                               Action
                             </th>
@@ -85,12 +87,29 @@
                                 <td :id="'ong_'+ log.id_member">{{ Number(log.ongkir).toLocaleString() }}</td>
                                 <td>
                                     <select :name="'kurir_' + log.id_member" @change="onChange($event,log.id_posting, log.id_member)" v-model="log.kurir">
+                                        <option value="">Pilih</option>
                                         <option value="ide">IDE</option>
                                         <option value="jne">JNE</option>    
                                     </select>
                                 </td>
+                                <td>
+                                    <select :name="'admin_' + log.id_member" v-model="log.admin">
+                                        <option value="">Pilih</option>
+                                        <option value="085880673559">Cempaka</option>
+                                        <option value="081382716130">Tulip</option>
+                                        <option value="085890311831">Mawar</option>
+                                        <option value="085883316237">Azalea</option>
+                                        <option value="085813203599">Sakura</option>
+                                        <option value="089671115527">Lavender</option>
+                                        <option value="085883316238">Kenanga</option> 
+                                        <option value="085693689877">Daisy</option> 
+                                        <option value="085883316238">Dahlia</option> 
+                                        <option value="081585125668">Anggrek</option> 
+                                        <option value="081268365968">Melati</option>    
+                                    </select>
+                                </td>
                                 <!-- <td><i class='icon ion-checkmark' style='color: green'></i></td> -->
-                                <td><a href='#' class='btn btn-warning btn-sm' @click="saveData(log.id_posting,log.id_member,log.kurir)">Kirim Notifikasi</a></td>
+                                <td><a href='#' class='btn btn-warning btn-sm' @click="saveData(log.id_posting,log.id_member,log.kurir,log.admin)">Kirim Notifikasi</a></td>
                             </tr>
                             <tr>
                                 <td></td>

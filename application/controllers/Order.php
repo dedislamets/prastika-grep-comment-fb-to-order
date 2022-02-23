@@ -161,7 +161,8 @@ class Order extends CI_Controller {
       // $results_ongkir = $this->admin->cek_ongkir('746',$member['kec_id'],floatval($value['berat']));
       // $data['rekapan'][$key]['ongkir'] = $results_ongkir['costs'][0]['cost'][0]['value'];
       $data['rekapan'][$key]['ongkir'] = 0;
-      $data['rekapan'][$key]['kurir'] = 'ide';
+      $data['rekapan'][$key]['kurir'] = '';
+      $data['rekapan'][$key]['admin'] = '';
       $this->db->select("kode_order,kode_barang,nama_barang,qty,berat,harga");
       $this->db->from("rekapan");
       $this->db->join("barang","barang.kode_barang=rekapan.kode_product");
@@ -252,7 +253,8 @@ class Order extends CI_Controller {
         'ongkir'  => $ongkir,
         'kurir'   => $jsonArray['kurir'],
         'kirim'   => 1,
-        'rand'    => $kode_rand
+        'rand'    => $kode_rand,
+        'hp_admin' => $jsonArray['admin'],
     );
 
     $this->db->trans_begin();
@@ -310,7 +312,7 @@ Invoice expired ". $exp ."
 Jika pembayaran kamu masih belum terproses, silahkan hubungi kami.*
 
 _Tim Prastika Collection_";
-        $this->admin->simpan_wa($member['nomor_wa'], $msg);
+        $this->admin->simpan_wa($jsonArray['admin'], $msg);
     }
 
     $this->db->trans_complete();   
