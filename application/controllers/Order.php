@@ -399,7 +399,7 @@ _Tim Prastika Collection_";
       $this->db->select("invoice.*,members.nama_lengkap");
       $this->db->from("invoice");
       $this->db->join("members","members.kode_member=invoice.id_member");
-
+      $this->db->order_by("tgl_invoice DESC");
       $pengguna = $this->db->get();
       $data = array();
       foreach($pengguna->result() as $r)
